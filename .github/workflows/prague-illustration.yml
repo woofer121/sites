@@ -1,0 +1,49 @@
+name: Archive Prague illustration
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/prague-illustration.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: prague-illustration
+  cancel-in-progress: false
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image converter
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Download and optimize original illustration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen
+          from io import BytesIO
+          from PIL import Image
+          url = 'https://user-gen-media-assets.s3.amazonaws.com/gemini_images/33980dba-40c3-4314-892a-026cbcbcc0a8.png'
+          with urlopen(url, timeout=60) as response:
+              raw = response.read(12000000)
+          image = Image.open(BytesIO(raw)).convert('RGB')
+          image.thumbnail((1600, 2400))
+          folder = Path('prague/assets')
+          folder.mkdir(parents=True, exist_ok=True)
+          image.save(folder / 'prague-map.webp', 'WEBP', quality=88, method=6)
+          (folder / 'illustration-source.md').write_text('# Illustration originale de Prague\n\nCréée le 4 novembre 2026 pour ce carnet, à partir d’une description originale.\n\nSource de génération : '+url+'\n\nCarte artistique isométrique : positions illustrées approximatives, pas une carte GPS ni un modèle photogrammétrique. Les liens de navigation sont indépendants de cette illustration.\n', encoding='utf-8')
+          PY
+      - name: Save illustration in repository
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add prague/assets/prague-map.webp prague/assets/illustration-source.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive generated Prague map illustration as optimized WebP'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
