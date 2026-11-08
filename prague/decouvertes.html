@@ -216,18 +216,18 @@ const coords={
 'camp':[50.0719,14.4182],'idiom':[50.0874,14.4173],'cubist-lamp':[50.0807,14.4236],'vojanovy':[50.0889,14.4076],'grebovka':[50.0674,14.4469],'r2d2':[50.0699,14.4328],'tynska':[50.0883,14.4224],'certovka-canal':[50.0863,14.4088]
 };
 let mapMarkers={};
-function markerIcon(isSaved){const color=isSaved?'#e53935':'#26384f';const html='<span style="display:flex;align-items:center;justify-content:center;width:27px;height:27px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:#fff;font:700 13px/1 Arial">'+(isSaved?'♥':'')+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[27,27],iconAnchor:[13,13],popupAnchor:[0,-13]});}
-function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id))));}
-function initMap(){
- if(!window.L)return;
- const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
- L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
- const plannedInfo={
+const plannedInfo={
  'tynska':{date:'Jeudi 10 décembre',time:'17:00',slot:'Monuments de la Vieille-Ville',before:'Arrivée et installation au Kafka Prague rooms, vers 16:00.',after:'Dîner chez Maitrea, proposé à 19:00 (non réservé).'},
  'certovka-canal':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Mur Lennon, Čertovka et Kampa',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'},
  'babies-kampa':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Balade à Kampa (secteur prévu)',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'}
 };
 function markerIcon(isSaved,isPlanned){const color=isPlanned?'#168b58':isSaved?'#e53935':'#26384f';const glyph=isPlanned&&isSaved?'♥':isPlanned?'✓':isSaved?'♥':'';const html='<span style="display:flex;align-items:center;justify-content:center;width:29px;height:29px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:'+(isPlanned&&isSaved?'#ffdddd':'#fff')+';font:700 14px/1 Arial">'+glyph+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-14]});}
+function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));}
+function initMap(){
+ if(!window.L)return;
+ const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
+ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
+ function markerIcon(isSaved,isPlanned){const color=isPlanned?'#168b58':isSaved?'#e53935':'#26384f';const glyph=isPlanned&&isSaved?'♥':isPlanned?'✓':isSaved?'♥':'';const html='<span style="display:flex;align-items:center;justify-content:center;width:29px;height:29px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:'+(isPlanned&&isSaved?'#ffdddd':'#fff')+';font:700 14px/1 Arial">'+glyph+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-14]});}
 function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));}
 places.forEach(p=>{const point=coords[p.id];if(!point)return;const info=plannedInfo[p.id];let popup='<strong>'+esc(p.name)+'</strong>';if(info){popup+='<div style="margin:7px 0;padding:8px 10px;background:#eaf6ef;border-radius:9px;color:#17633f"><b>✓ Déjà au programme</b><br>'+esc(info.date)+' · '+esc(info.time)+'<br><b>'+esc(info.slot)+'</b><br><br><b>Avant :</b> '+esc(info.before)+'<br><b>Après :</b> '+esc(info.after)+'</div>';}popup+='<a href="#lieu-'+p.id+'" data-map-place="'+p.id+'">Voir la découverte ↓</a>';mapMarkers[p.id]=L.marker(point,{icon:markerIcon(saved.includes(p.id),!!info)}).addTo(map).bindPopup(popup);});
  setTimeout(()=>map.invalidateSize(),150);
