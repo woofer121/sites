@@ -102,7 +102,7 @@ body{font-size:16px;line-height:1.7}
 .card-content>p{font-size:13px;line-height:1.6;-webkit-line-clamp:4}
 .card .open{font-size:12px;min-height:40px;padding:9px 12px}
 .map-card-button{border:1px solid #cbd5e1;background:#f7f9fc;color:#25364c;border-radius:8px;font-size:12px;font-weight:700;min-height:40px;padding:8px 11px}.map-card-button:active{background:#e8eef6}
-.map-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.map-filter label{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#526176;background:#f6f8fa;border:1px solid #e2e7ed;border-radius:20px;padding:5px 9px}.map-filter input{accent-color:#168b58;width:13px;height:13px;margin:0}
+.map-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 10px}.map-filter label{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#526176;background:#f6f8fa;border:1px solid #e2e7ed;border-radius:20px;padding:5px 9px}.map-filter input{accent-color:#168b58;width:13px;height:13px;margin:0}.map-filter #locate-me{border:1px solid #cbd5e1;border-radius:20px;background:#fff;color:#17243a;padding:7px 12px;font:600 12px/1.2 var(--sans);min-height:30px;box-shadow:0 2px 8px #101a2b12}.map-filter #locate-me:disabled{opacity:.6;cursor:wait}
 .card .save{font-size:20px;min-width:40px;min-height:40px}
 .detail h3{font-size:12px;letter-spacing:.09em;margin-top:18px}
 .detail p{font-size:15px;line-height:1.75;margin-bottom:8px}
@@ -141,9 +141,8 @@ body{font-size:16px;line-height:1.7}
 <section class="map-panel" aria-labelledby="map-title">
  <div class="map-heading"><div><p class="eyebrow">Les lieux à découvrir</p><h2 id="map-title">La carte de Prague.</h2></div></div>
  <div id="prague-map" aria-label="Carte des découvertes de Prague"></div>
- <div class="map-location-actions"><button id="locate-me" type="button">◎ Ma position</button></div>
- <div class="map-filter" aria-label="Filtres de la carte"><label title="Afficher ou masquer le programme"><input id="show-planned" type="checkbox" checked aria-label="Programme"><i class="legend-dot planned"></i></label><label title="Afficher ou masquer les découvertes"><input id="show-discoveries" type="checkbox" checked aria-label="Découvertes"><i class="legend-dot other"></i></label></div>
- <div class="map-legend"><span><i class="legend-dot planned"></i> Déjà au programme</span><span><i class="legend-dot favorite"></i> Favori</span><span><i class="legend-dot other"></i> À découvrir</span></div><p class="map-foot">Touchez un repère pour voir le lieu et, lorsqu’il est prévu, son créneau ainsi que les étapes avant et après.</p>
+ <div class="map-filter" aria-label="Filtres de la carte"><label title="Afficher ou masquer le programme"><input id="show-planned" type="checkbox" checked aria-label="Programme"><i class="legend-dot planned"></i></label><label title="Afficher ou masquer les découvertes"><input id="show-discoveries" type="checkbox" checked aria-label="Découvertes"><i class="legend-dot other"></i></label><button id="locate-me" type="button">◎ Ma position</button></div>
+ <div class="map-legend"><span><i class="legend-dot planned"></i> Déjà au programme</span><span><i class="legend-dot favorite"></i> Favori</span><span><i class="legend-dot other"></i> À découvrir</span></div>
 </section>
 <div class="toolbar"><input class="search" id="search" type="search" placeholder="Rechercher un lieu, un quartier…" aria-label="Rechercher une découverte"></div>
 <nav class="filters" aria-label="Filtrer les découvertes"><button class="filter" data-filter="all" aria-pressed="true">Tout voir</button><button class="filter" data-filter="histoire" aria-pressed="false">Histoire</button><button class="filter" data-filter="insolite" aria-pressed="false">Insolite</button><button class="filter" data-filter="culture" aria-pressed="false">Culture</button><button class="filter" data-filter="balade" aria-pressed="false">Balade</button><button class="filter" data-filter="saved" aria-pressed="false">♥ Mes favoris</button></nav>
