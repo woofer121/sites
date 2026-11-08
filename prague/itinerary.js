@@ -30,3 +30,5 @@ const PRAGUE_DAYS = [
 {id:'j3_3',title:'Déjeuner tôt et valises',time:'11:30–12:30',desc:'Rester dans le centre, récupérer les bagages et ne pas lancer de longue visite.',x:69.5,y:35.5,place:'kaprova',mapQuery:'Kaprova 13 Prague'},
 {id:'j3_4',title:'Départ pour l’aéroport',time:'Vers 13:00',desc:'Métro A puis trolleybus 59 ; objectif terminal 2 vers 14 h 30, à adapter aux consignes de la compagnie. Vol EJU1782 Prague 16:45 → Nice 18:35 selon billets. Vérifier les horaires actualisés.',offMap:true,place:'airport',mapQuery:'Vaclav Havel Airport Prague Terminal 2'}]}
 ];
+/* Guide partagé : chargement indépendant, sans modifier le planning ni la carte. */
+(() => {const load=()=>{if(document.getElementById('prague-guide-script'))return;const s=document.createElement('script');s.id='prague-guide-script';s.src='./guide.js?v=20261108-2237';document.head.append(s);};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();})();
