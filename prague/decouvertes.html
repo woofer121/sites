@@ -101,6 +101,8 @@ body{font-size:16px;line-height:1.7}
 .card h2{font-size:23px;line-height:1.15}
 .card-content>p{font-size:13px;line-height:1.6;-webkit-line-clamp:4}
 .card .open{font-size:12px;min-height:40px;padding:9px 12px}
+.map-card-button{border:1px solid #cbd5e1;background:#f7f9fc;color:#25364c;border-radius:8px;font-size:12px;font-weight:700;min-height:40px;padding:8px 11px}.map-card-button:active{background:#e8eef6}
+.map-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.map-filter label{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#526176;background:#f6f8fa;border:1px solid #e2e7ed;border-radius:20px;padding:5px 9px}.map-filter input{accent-color:#168b58;width:13px;height:13px;margin:0}
 .card .save{font-size:20px;min-width:40px;min-height:40px}
 .detail h3{font-size:12px;letter-spacing:.09em;margin-top:18px}
 .detail p{font-size:15px;line-height:1.75;margin-bottom:8px}
@@ -139,6 +141,7 @@ body{font-size:16px;line-height:1.7}
 <section class="map-panel" aria-labelledby="map-title">
  <div class="map-heading"><div><p class="eyebrow">Les lieux à découvrir</p><h2 id="map-title">La carte de Prague.</h2></div></div>
  <div id="prague-map" aria-label="Carte des découvertes de Prague"></div>
+ <div class="map-filter" aria-label="Afficher les catégories de repères"><label><input id="show-planned" type="checkbox" checked> <i class="legend-dot planned"></i> Programme</label><label><input id="show-discoveries" type="checkbox" checked> <i class="legend-dot other"></i> Découvertes</label></div>
  <div class="map-legend"><span><i class="legend-dot planned"></i> Déjà au programme</span><span><i class="legend-dot favorite"></i> Favori</span><span><i class="legend-dot other"></i> À découvrir</span></div><p class="map-foot">Touchez un repère pour voir le lieu et, lorsqu’il est prévu, son créneau ainsi que les étapes avant et après.</p>
 </section>
 <div class="toolbar"><input class="search" id="search" type="search" placeholder="Rechercher un lieu, un quartier…" aria-label="Rechercher une découverte"></div>
@@ -200,8 +203,8 @@ const photos={
 let filter='all';const key='prague-discover-favorites-v1';let saved=[];try{saved=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const maps=p=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.map);
-function render(){const q=search.value.trim().toLocaleLowerCase('fr');const list=places.filter(p=>(filter==='all'||(filter==='saved'?saved.includes(p.id):p.kind===filter))&&(!q||(p.name+' '+p.area+' '+p.intro+' '+p.tag).toLocaleLowerCase('fr').includes(q)));grid.innerHTML='';if(!list.length){grid.innerHTML='<p class="empty">Aucune découverte ne correspond. Essayez un autre mot ou filtre.</p>';return;}for(const p of list){const card=document.createElement('article');card.className='card';card.id='lieu-'+p.id;const ph=photos[p.id];card.innerHTML='<div class="card-visual"><img class="place-photo" src="'+(ph?ph.url:'https://commons.wikimedia.org/wiki/Special:FilePath/Praha.jpg?width=1200')+'" alt="'+esc(ph?ph.alt:'Vue de Prague')+'" loading="lazy" referrerpolicy="no-referrer"></div><div class="card-content"><div class="card-top"><span class="tag">'+esc(p.tag)+'</span><span class="season">'+esc(p.season)+'</span></div><h2>'+esc(p.name)+'</h2><p>'+esc(p.intro)+'</p><div class="card-bottom"><div><button class="save" data-save="'+p.id+'" aria-label="Ajouter aux favoris" aria-pressed="'+saved.includes(p.id)+'">'+(saved.includes(p.id)?'♥':'♡')+'</button> <button class="open" data-open="'+p.id+'" aria-expanded="false">Découvrir ↓</button></div></div></div><div class="detail"><h3>Pourquoi s’y arrêter</h3><p>'+esc(p.story)+'</p><h3>Le détail à observer</h3><p>'+esc(p.look)+'</p><h3>Votre mini-défi à deux</h3><p>'+esc(p.challenge)+'</p><div class="detail-actions"><a target="_blank" rel="noopener" href="'+maps(p)+'">Ouvrir dans Google Maps ↗</a><a target="_blank" rel="noopener" href="'+esc(p.source)+'">Source touristique ↗</a></div></div>';grid.append(card);}}
-grid.addEventListener('click',e=>{const save=e.target.closest('[data-save]');if(save){const id=save.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];try{localStorage.setItem(key,JSON.stringify(saved))}catch(e){}render();updateMapMarkers();return;}const open=e.target.closest('[data-open]');if(open){const card=open.closest('.card');card.classList.toggle('expanded');open.setAttribute('aria-expanded',String(card.classList.contains('expanded')));open.textContent=card.classList.contains('expanded')?'Refermer ↑':'Découvrir ↓';}});
+function render(){const q=search.value.trim().toLocaleLowerCase('fr');const list=places.filter(p=>(filter==='all'||(filter==='saved'?saved.includes(p.id):p.kind===filter))&&(!q||(p.name+' '+p.area+' '+p.intro+' '+p.tag).toLocaleLowerCase('fr').includes(q)));grid.innerHTML='';if(!list.length){grid.innerHTML='<p class="empty">Aucune découverte ne correspond. Essayez un autre mot ou filtre.</p>';return;}for(const p of list){const card=document.createElement('article');card.className='card';card.id='lieu-'+p.id;const ph=photos[p.id];card.innerHTML='<div class="card-visual"><img class="place-photo" src="'+(ph?ph.url:'https://commons.wikimedia.org/wiki/Special:FilePath/Praha.jpg?width=1200')+'" alt="'+esc(ph?ph.alt:'Vue de Prague')+'" loading="lazy" referrerpolicy="no-referrer"></div><div class="card-content"><div class="card-top"><span class="tag">'+esc(p.tag)+'</span><span class="season">'+esc(p.season)+'</span></div><h2>'+esc(p.name)+'</h2><p>'+esc(p.intro)+'</p><div class="card-bottom"><div><button class="save" data-save="'+p.id+'" aria-label="Ajouter aux favoris" aria-pressed="'+saved.includes(p.id)+'">'+(saved.includes(p.id)?'♥':'♡')+'</button> <button class="open" data-open="'+p.id+'" aria-expanded="false">Découvrir ↓</button> <button class="map-card-button" data-map-focus="'+p.id+'" type="button">Voir sur la carte</button></div></div></div><div class="detail"><h3>Pourquoi s’y arrêter</h3><p>'+esc(p.story)+'</p><h3>Le détail à observer</h3><p>'+esc(p.look)+'</p><h3>Votre mini-défi à deux</h3><p>'+esc(p.challenge)+'</p><div class="detail-actions"><a target="_blank" rel="noopener" href="'+maps(p)+'">Ouvrir dans Google Maps ↗</a><a target="_blank" rel="noopener" href="'+esc(p.source)+'">Source touristique ↗</a></div></div>';grid.append(card);}}
+grid.addEventListener('click',e=>{const focus=e.target.closest('[data-map-focus]');if(focus){focusMapPoint(focus.dataset.mapFocus);return;}const save=e.target.closest('[data-save]');if(save){const id=save.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];try{localStorage.setItem(key,JSON.stringify(saved))}catch(e){}render();updateMapMarkers();return;}const open=e.target.closest('[data-open]');if(open){const card=open.closest('.card');card.classList.toggle('expanded');open.setAttribute('aria-expanded',String(card.classList.contains('expanded')));open.textContent=card.classList.contains('expanded')?'Refermer ↑':'Découvrir ↓';}});
 filters.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render();}));
 search.addEventListener('input',render);
 
@@ -216,16 +219,20 @@ const coords={
 'camp':[50.0719,14.4182],'idiom':[50.0874,14.4173],'cubist-lamp':[50.0807,14.4236],'vojanovy':[50.0889,14.4076],'grebovka':[50.0674,14.4469],'r2d2':[50.0699,14.4328],'tynska':[50.0883,14.4224],'certovka-canal':[50.0863,14.4088]
 };
 let mapMarkers={};
+let discoveryMap=null;
+let showPlannedMarkers=true,showDiscoveryMarkers=true;
+function refreshMapVisibility(){Object.keys(mapMarkers).forEach(id=>{const planned=!!plannedInfo[id]||id.startsWith("plan-");const visible=planned?showPlannedMarkers:showDiscoveryMarkers;mapMarkers[id].setOpacity(visible?1:0);mapMarkers[id].setZIndexOffset(planned?500:0);});}
+function focusMapPoint(id){const marker=mapMarkers[id];if(!marker||!discoveryMap)return;const point=marker.getLatLng();document.getElementById("map-title").scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>{discoveryMap.invalidateSize();discoveryMap.setView(point,16,{animate:true});marker.openPopup();},350);}
 const plannedInfo={
  'tynska':{date:'Jeudi 10 décembre',time:'17:00',slot:'Monuments de la Vieille-Ville',before:'Arrivée et installation au Kafka Prague rooms, vers 16:00.',after:'Dîner chez Maitrea, proposé à 19:00 (non réservé).'},
  'certovka-canal':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Mur Lennon, Čertovka et Kampa',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'},
  'babies-kampa':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Balade à Kampa (secteur prévu)',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'}
 };
 function markerIcon(isSaved,isPlanned){const color=isPlanned?'#168b58':isSaved?'#e53935':'#26384f';const glyph=isPlanned&&isSaved?'♥':isPlanned?'✓':isSaved?'♥':'';const html='<span style="display:flex;align-items:center;justify-content:center;width:29px;height:29px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:'+(isPlanned&&isSaved?'#ffdddd':'#fff')+';font:700 14px/1 Arial">'+glyph+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-14]});}
-function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));}
+function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));refreshMapVisibility();}
 function initMap(){
  if(!window.L)return;
- const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
+ const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);discoveryMap=map;
  L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
  function markerIcon(isSaved,isPlanned){const color=isPlanned?'#168b58':isSaved?'#e53935':'#26384f';const glyph=isPlanned&&isSaved?'♥':isPlanned?'✓':isSaved?'♥':'';const html='<span style="display:flex;align-items:center;justify-content:center;width:29px;height:29px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:'+(isPlanned&&isSaved?'#ffdddd':'#fff')+';font:700 14px/1 Arial">'+glyph+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-14]});}
 function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));}
@@ -248,10 +255,13 @@ places.forEach(p=>{const point=coords[p.id];if(!point)return;const info=plannedI
   const popup='<strong>'+esc(p.name)+'</strong>'+panel+'<span style="font-size:11px;color:#657184">Repère du parcours prévu</span>';
   mapMarkers[p.id]=L.marker(p.point,{icon:markerIcon(false,true)}).addTo(map).bindPopup(popup);
  });
+ refreshMapVisibility();
  setTimeout(()=>map.invalidateSize(),150);
 }
 document.getElementById('prague-map').addEventListener('click',e=>{const a=e.target.closest('[data-map-place]');if(a){const card=document.getElementById('lieu-'+a.dataset.mapPlace);if(card){card.classList.add('expanded');card.scrollIntoView({behavior:'smooth',block:'center'});}}});
 initMap();
+document.getElementById('show-planned').addEventListener('change',e=>{showPlannedMarkers=e.target.checked;refreshMapVisibility();});
+document.getElementById('show-discoveries').addEventListener('change',e=>{showDiscoveryMarkers=e.target.checked;refreshMapVisibility();});
 
 render();
 })();
