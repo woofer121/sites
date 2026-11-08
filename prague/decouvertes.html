@@ -74,22 +74,16 @@ main{max-width:1240px;padding:clamp(22px,4vw,46px) clamp(14px,3vw,34px) 72px}
 <body>
 <header><a class="brand" href="./index.html">VOTRE <em>PRAGUE</em><small>LE CITY GUIDE À DEUX</small></a><a class="back" href="./index.html">← Retour au carnet</a></header>
 <main>
-<section class="intro"><p class="eyebrow">L'atlas des curiosités · édition décembre</p><h1>Prague a encore<br>des secrets.</h1><p>Entre deux grands monuments, voici des lieux qui racontent une autre ville : cours cachées, bibliothèques, passages, petites rues et histoires étonnantes. À parcourir à votre rythme, sans transformer le séjour en course.</p></section>
-<div class="note"><strong>Un conseil pour décembre.</strong> Les horaires et accès peuvent varier en hiver. Les jardins et certains sites saisonniers sont signalés ; vérifiez toujours les conditions le jour même. Les lieux résidentiels se découvrent depuis l'espace public, sans entrer dans les propriétés privées. La sélection s'inspire aussi des publications de comptes touristiques locaux comme <a href="https://www.instagram.com/cityofprague/" target="_blank" rel="noopener">@cityofprague</a> et <a href="https://www.instagram.com/praguecitytourism/" target="_blank" rel="noopener">@praguecitytourism</a>, ainsi que de retours de voyageurs. Les réseaux donnent des idées ; les informations pratiques sont recoupées avec les sources touristiques.</div>
-
+<section class="intro"><p class="eyebrow">Le city guide à deux</p><h1>Prague a encore<br>des secrets.</h1><p>Des lieux insolites, des passages cachés et des curiosités pour découvrir Prague autrement.</p></section>
 <section class="map-panel" aria-labelledby="map-title">
- <div class="map-heading"><div><p class="eyebrow">Votre boussole pragoise</p><h2 id="map-title">Autour de vous.</h2><p>Les curiosités à deux pas, directement sur la carte.</p></div>
- <div class="map-actions"><button class="map-action primary" id="locate-me">◎ Me localiser</button><button class="map-action" id="show-all-map">Toute la sélection</button></div></div>
- <div class="map-meta"><span class="map-status" id="map-status" role="status">Carte de Prague · autorisez la position pour voir les lieux les plus proches.</span>
- <div class="radius-pills" aria-label="Rayon de recherche"><button data-radius="500" aria-pressed="false">500 m</button><button data-radius="1000" aria-pressed="true">1 km</button><button data-radius="3000" aria-pressed="false">3 km</button><button data-radius="all" aria-pressed="false">Tout</button></div></div>
- <div id="prague-map" aria-label="Carte interactive des découvertes de Prague"></div>
- <div class="nearby-list" id="nearby-list" aria-live="polite"></div>
- <p class="map-foot">La position est utilisée uniquement dans cette page et n’est pas enregistrée. Fond OpenStreetMap France · marqueurs et distances indicatifs. La géolocalisation fonctionne si le site est servi en HTTPS et après votre accord.</p>
+ <div class="map-heading"><div><p class="eyebrow">Les lieux à découvrir</p><h2 id="map-title">La carte de Prague.</h2></div></div>
+ <div id="prague-map" aria-label="Carte des découvertes de Prague"></div>
+ <p class="map-foot">Carte OpenStreetMap · emplacements indicatifs.</p>
 </section>
 <div class="toolbar"><input class="search" id="search" type="search" placeholder="Rechercher un lieu, un quartier…" aria-label="Rechercher une découverte"><button class="surprise" id="surprise">✦ Surprends-nous</button></div>
 <nav class="filters" aria-label="Filtrer les découvertes"><button class="filter" data-filter="all" aria-pressed="true">Tout voir</button><button class="filter" data-filter="histoire" aria-pressed="false">Histoire</button><button class="filter" data-filter="insolite" aria-pressed="false">Insolite</button><button class="filter" data-filter="culture" aria-pressed="false">Culture</button><button class="filter" data-filter="balade" aria-pressed="false">Balade</button><button class="filter" data-filter="saved" aria-pressed="false">♥ Mes favoris</button></nav>
 <section class="grid" id="grid" aria-live="polite"></section>
-<p class="footer-note">Sélection éditoriale pour compléter votre programme, pas des réservations. Les durées sont indicatives. Les liens officiels et la navigation sont à vérifier avant le départ. Sources principales : Prague City Tourism et VisitCzechia.</p>
+
 </main><div class="toast" id="toast" role="status"></div>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -129,7 +123,7 @@ search.addEventListener('input',render);
 document.getElementById('surprise').addEventListener('click',()=>{const candidates=places.filter(p=>filter==='all'||filter==='saved'?filter==='all'||saved.includes(p.id):p.kind===filter);const p=candidates[Math.floor(Math.random()*candidates.length)];if(!p){toast('Aucun favori pour le moment. Ajoutez-en avec ♡.');return;}filter='all';filters.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.filter==='all')));search.value='';render();const card=document.getElementById('lieu-'+p.id);card.classList.add('expanded');const btn=card.querySelector('[data-open]');btn.setAttribute('aria-expanded','true');btn.textContent='Refermer ↑';card.scrollIntoView({behavior:'smooth',block:'center'});});
 let toastTimer;function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200);}
 
-/* Carte et géolocalisation */
+/* Carte des découvertes */
 const coords={
 'golden-ring':[50.0884,14.4213],'clam-gallas':[50.0869,14.4166],'klementinum':[50.0867,14.4160],
 'new-world':[50.0915,14.3897],'strahov':[50.0862,14.3886],'lucerna':[50.0811,14.4255],
@@ -137,41 +131,15 @@ const coords={
 'fanta':[50.0833,14.4350],'babies-kampa':[50.0842,14.4088],'paternoster':[50.0875,14.4187],
 'camp':[50.0719,14.4182]
 };
-let map=null,userMarker=null,userCircle=null,userPosition=null,activeRadius=1000,placeMarkers={};
-const statusEl=document.getElementById('map-status'),nearbyEl=document.getElementById('nearby-list');
-const distance=(a,b)=>{const R=6371000,toRad=x=>x*Math.PI/180,dLat=toRad(b[0]-a[0]),dLon=toRad(b[1]-a[1]),x=Math.sin(dLat/2)**2+Math.cos(toRad(a[0]))*Math.cos(toRad(b[0]))*Math.sin(dLon/2)**2;return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));};
-const distanceLabel=n=>n<1000?Math.round(n)+' m':(n/1000).toFixed(1).replace('.',',')+' km';
 function initMap(){
- if(!window.L){statusEl.textContent='La carte ne se charge pas. Vérifiez votre connexion puis rechargez la page.';return;}
- map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
- L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · style <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
- places.forEach(p=>{const c=coords[p.id];if(!c)return;const m=L.marker(c).addTo(map).bindPopup('<strong>'+esc(p.name)+'</strong>'+esc(p.area)+'<br><a href="#lieu-'+p.id+'" data-map-place="'+p.id+'">Voir la découverte ↓</a>');placeMarkers[p.id]=m;});
- renderNearby();
+ if(!window.L)return;
+ const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
+ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
+ places.forEach(p=>{const point=coords[p.id];if(!point)return;L.marker(point).addTo(map).bindPopup('<strong>'+esc(p.name)+'</strong>'+esc(p.area)+'<br><a href="#lieu-'+p.id+'" data-map-place="'+p.id+'">Voir la découverte ↓</a>');});
  setTimeout(()=>map.invalidateSize(),150);
 }
-function renderNearby(){
- const rows=places.filter(p=>coords[p.id]).map(p=>({...p,meters:userPosition?distance(userPosition,coords[p.id]):null})).filter(p=>!userPosition||activeRadius==='all'||p.meters<=activeRadius).sort((a,b)=>userPosition?a.meters-b.meters:a.name.localeCompare(b.name,'fr'));
- nearbyEl.innerHTML=rows.slice(0,6).map(p=>'<button class="nearby-item" data-nearby="'+p.id+'"><strong>'+esc(p.name)+'</strong><span>'+esc(p.area)+(userPosition?' · '+distanceLabel(p.meters):'')+'</span></button>').join('')||'<p class="map-status">Aucun lieu dans ce rayon. Essayez une distance plus grande.</p>';
-}
-function locate(){
- if(!navigator.geolocation){statusEl.textContent='La géolocalisation n’est pas disponible sur cet appareil. Vous pouvez explorer la carte manuellement.';return;}
- statusEl.textContent='Recherche de votre position…';
- navigator.geolocation.getCurrentPosition(pos=>{
-  userPosition=[pos.coords.latitude,pos.coords.longitude];
-  if(userMarker)map.removeLayer(userMarker);if(userCircle)map.removeLayer(userCircle);
-  userMarker=L.circleMarker(userPosition,{radius:9,color:'#fff',weight:3,fillColor:'#b53c29',fillOpacity:1}).addTo(map).bindPopup('Vous êtes ici');
-  userCircle=L.circle(userPosition,{radius:activeRadius==='all'?1000:activeRadius,color:'#b53c29',weight:1,opacity:.45,fillOpacity:.05}).addTo(map);
-  map.setView(userPosition,15);statusEl.textContent='Position trouvée · les lieux sont classés du plus proche au plus éloigné.';
-  renderNearby();
- },err=>{const msg={1:'Autorisation refusée : activez la position dans les réglages du navigateur si vous le souhaitez.',2:'Position indisponible pour le moment.',3:'La recherche de position a expiré.'};statusEl.textContent=(msg[err.code]||'Impossible de récupérer votre position.')+' La carte reste utilisable manuellement.';},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
-}
-document.getElementById('locate-me').addEventListener('click',locate);
-document.getElementById('show-all-map').addEventListener('click',()=>{if(map){map.fitBounds(L.latLngBounds(Object.values(coords)),{padding:[28,28]});statusEl.textContent='Toute la sélection est affichée sur la carte.';}});
-document.querySelectorAll('[data-radius]').forEach(b=>b.addEventListener('click',()=>{activeRadius=b.dataset.radius==='all'?'all':Number(b.dataset.radius);document.querySelectorAll('[data-radius]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));if(userPosition){renderNearby();if(userCircle){userCircle.setRadius(activeRadius==='all'?1000:activeRadius);}}}));
-nearbyEl.addEventListener('click',e=>{const b=e.target.closest('[data-nearby]');if(!b)return;const id=b.dataset.nearby,p=places.find(x=>x.id===id);if(!p)return;map.setView(coords[id],17);placeMarkers[id].openPopup();const card=document.getElementById('lieu-'+id);if(card){card.classList.add('expanded');const btn=card.querySelector('[data-open]');btn.setAttribute('aria-expanded','true');btn.textContent='Refermer ↑';}});
 document.getElementById('prague-map').addEventListener('click',e=>{const a=e.target.closest('[data-map-place]');if(a){const card=document.getElementById('lieu-'+a.dataset.mapPlace);if(card){card.classList.add('expanded');card.scrollIntoView({behavior:'smooth',block:'center'});}}});
 initMap();
-locate();
 
 render();
 })();
