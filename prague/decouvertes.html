@@ -88,6 +88,47 @@ main{max-width:1240px;padding:clamp(22px,4vw,46px) clamp(14px,3vw,34px) 72px}
  .card .area{max-width:100px}
  .card .open{padding:6px 8px}
 }
+
+/* Lisibilité et confort tactile */
+body{font-size:16px;line-height:1.7}
+.search{font-size:16px;min-height:48px}
+.filter{font-size:13px;min-height:42px;padding:9px 15px}
+.surprise{font-size:13px;min-height:46px}
+.map-heading p,.map-status{font-size:14px}
+.map-action,.radius-pills button{font-size:13px;min-height:40px;padding:9px 13px}
+.card{padding:16px;gap:0 16px}
+.card .tag{font-size:11px;letter-spacing:.08em}
+.card h2{font-size:23px;line-height:1.15}
+.card-content>p{font-size:13px;line-height:1.6;-webkit-line-clamp:4}
+.card .open{font-size:12px;min-height:40px;padding:9px 12px}
+.card .save{font-size:20px;min-width:40px;min-height:40px}
+.detail h3{font-size:12px;letter-spacing:.09em;margin-top:18px}
+.detail p{font-size:15px;line-height:1.75;margin-bottom:8px}
+.detail-actions a{font-size:13px;min-height:42px;padding:10px 14px;display:inline-flex;align-items:center}
+.nearby-item strong{font-size:18px}
+.nearby-item span{font-size:12px;line-height:1.5}
+.map-foot,.footer-note{font-size:12px;line-height:1.6}
+.leaflet-popup-content{font-size:14px;line-height:1.6}
+.leaflet-popup-content a{display:inline-block;padding:6px 0}
+@media(max-width:650px){
+ body{font-size:16px;line-height:1.7}
+ main{padding-left:13px;padding-right:13px}
+ .card{grid-template-columns:116px minmax(0,1fr);gap:0 13px;padding:12px}
+ .place-photo{width:116px;height:116px}
+ .card-content{min-height:116px}
+ .card h2{font-size:20px;line-height:1.18;margin:6px 0}
+ .card-content>p{font-size:12.5px;line-height:1.55;-webkit-line-clamp:4}
+ .card .tag{font-size:10px}
+ .card .open{font-size:11px;min-height:40px}
+ .card .save{min-width:40px;min-height:40px}
+ .detail p{font-size:15px;line-height:1.75}
+ .detail h3{font-size:12px}
+ .filter{font-size:13px;min-height:44px}
+ .search{font-size:16px;min-height:50px}
+ .surprise{min-height:46px}
+ .map-heading h2{font-size:30px}
+ #prague-map{height:390px}
+}
 </style>
 </head>
 <body>
