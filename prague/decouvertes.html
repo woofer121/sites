@@ -131,7 +131,7 @@ body{font-size:16px;line-height:1.7}
  .map-heading h2{font-size:30px}
  #prague-map{height:390px}
 }
-.map-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted)}.map-legend span{display:inline-flex;align-items:center;gap:7px}.legend-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#26384f}.legend-dot.planned{background:#168b58}.legend-dot.favorite{background:#e53935}.legend-dot.other{background:#26384f}.favorite-map-marker{background:transparent;border:0}
+.map-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted)}.map-legend span{display:inline-flex;align-items:center;gap:7px}.legend-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#26384f}.legend-dot.planned{background:#168b58}.legend-dot.favorite{background:#e53935}.legend-dot.other{background:#26384f}.favorite-map-marker{background:transparent;border:0}.map-location-actions{display:flex;justify-content:flex-end;margin:8px 0 2px}.map-location-actions button{border:1px solid #cbd5e1;border-radius:20px;background:#fff;color:#17243a;padding:7px 12px;font:600 12px/1.2 var(--sans);box-shadow:0 2px 8px #101a2b12}.map-location-actions button:active{transform:scale(.98)}
 </style>
 </head>
 <body>
@@ -220,6 +220,7 @@ const coords={
 };
 let mapMarkers={};
 let discoveryMap=null;
+let userLocationMarker=null,userAccuracyCircle=null;
 let showPlannedMarkers=true,showDiscoveryMarkers=true;
 function refreshMapVisibility(){Object.keys(mapMarkers).forEach(id=>{const planned=!!plannedInfo[id]||id.startsWith("plan-");const visible=planned?showPlannedMarkers:showDiscoveryMarkers;mapMarkers[id].setOpacity(visible?1:0);mapMarkers[id].setZIndexOffset(planned?500:0);});}
 function focusMapPoint(id){const marker=mapMarkers[id];if(!marker||!discoveryMap)return;const point=marker.getLatLng();document.getElementById("map-title").scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>{discoveryMap.invalidateSize();discoveryMap.setView(point,16,{animate:true});marker.openPopup();},350);}
