@@ -62,13 +62,34 @@ main{max-width:1240px;padding:clamp(22px,4vw,46px) clamp(14px,3vw,34px) 72px}
 @media(max-width:650px){header{padding:14px 16px}.brand{font-size:15px}.intro{border-radius:18px;padding:28px 22px}.intro h1{font-size:48px}.intro p{font-size:12px}.toolbar{align-items:stretch}.surprise{width:auto}.search{max-width:none}#prague-map{height:370px}.nearby-list{grid-template-columns:1fr 1fr}.card{min-height:0}.map-heading h2{font-size:30px}}
 
 
-/* Photos et finitions cartographiques */
-.card{padding:0;overflow:hidden}
-.place-photo{display:block;width:100%;height:190px;object-fit:cover;background:#e8edf2}.photo-credit{margin:0;padding:5px 19px 0;color:#8a94a3;font-size:9px;line-height:1.4}.photo-credit a{color:inherit;text-decoration:underline}
-.card .card-top,.card>h2,.card>p,.card>.card-bottom,.card>.detail{margin-left:19px;margin-right:19px}
-.card .card-top{margin-top:17px}.card>.card-bottom{margin-bottom:18px}.card>.detail{margin-bottom:18px}
+/* Cartes compactes : photo carrée à gauche, texte court à droite */
+.card{display:grid;grid-template-columns:132px minmax(0,1fr);gap:0 16px;align-items:start;padding:14px;min-height:0;overflow:hidden}
+.card-visual{grid-column:1;grid-row:1;min-width:0}
+.place-photo{display:block;width:132px;height:132px;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#e8edf2}
+.photo-credit{margin:0;padding:5px 1px 0;color:#8a94a3;font-size:8px;line-height:1.3}
+.photo-credit a{color:inherit;text-decoration:underline}
+.card-content{grid-column:2;grid-row:1;min-width:0;display:flex;flex-direction:column;min-height:132px}
+.card .card-top{margin:0;display:block}
+.card .tag{display:block;line-height:1.35}
+.card .season{display:none}
+.card h2{font-size:20px;line-height:1.12;margin:7px 0 6px;letter-spacing:-.04em}
+.card-content>p{font-size:11px;line-height:1.45;margin:0;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .card-bottom{margin: auto 0 0;padding-top:8px;gap:6px}
+.card .area{font-size:9px;line-height:1.3}
+.card .open{padding:7px 9px;font-size:9px}
+.card .save{font-size:15px;padding:3px 8px}
+.card>.detail{grid-column:1/-1;margin:14px 0 0;padding-top:13px}
 .leaflet-popup-content-wrapper{border-radius:13px;box-shadow:0 8px 30px #13243a24}
-@media(max-width:650px){.place-photo{height:205px}}
+@media(max-width:650px){
+ .grid{grid-template-columns:1fr;gap:10px}
+ .card{grid-template-columns:112px minmax(0,1fr);gap:0 13px;padding:11px;border-radius:13px}
+ .place-photo{width:112px;height:112px}
+ .card-content{min-height:112px}
+ .card h2{font-size:18px;margin:5px 0}
+ .card-content>p{-webkit-line-clamp:3;font-size:10px}
+ .card .area{max-width:100px}
+ .card .open{padding:6px 8px}
+}
 </style>
 </head>
 <body>
@@ -138,7 +159,7 @@ const photos={
 let filter='all';const key='prague-discover-favorites-v1';let saved=[];try{saved=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const maps=p=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.map);
-function render(){const q=search.value.trim().toLocaleLowerCase('fr');const list=places.filter(p=>(filter==='all'||(filter==='saved'?saved.includes(p.id):p.kind===filter))&&(!q||(p.name+' '+p.area+' '+p.intro+' '+p.tag).toLocaleLowerCase('fr').includes(q)));grid.innerHTML='';if(!list.length){grid.innerHTML='<p class="empty">Aucune découverte ne correspond. Essayez un autre mot ou filtre.</p>';return;}for(const p of list){const card=document.createElement('article');card.className='card';card.id='lieu-'+p.id;const ph=photos[p.id];card.innerHTML='<img class="place-photo" src="'+(ph?ph.url:'https://commons.wikimedia.org/wiki/Special:FilePath/Praha.jpg?width=1200')+'" alt="'+esc(ph?ph.alt:'Vue de Prague')+'" loading="lazy" referrerpolicy="no-referrer"><p class="photo-credit">Photo : <a href="'+(ph?ph.source:'https://commons.wikimedia.org/wiki/Prague')+'" target="_blank" rel="noopener">Wikimedia Commons · crédit et licence</a></p>'+'<div class="card-top"><span class="tag">'+esc(p.tag)+'</span><span class="season">'+esc(p.season)+'</span></div><h2>'+esc(p.name)+'</h2><p>'+esc(p.intro)+'</p><div class="card-bottom"><span class="area">'+esc(p.area)+'</span><div><button class="save" data-save="'+p.id+'" aria-label="Ajouter aux favoris" aria-pressed="'+saved.includes(p.id)+'">'+(saved.includes(p.id)?'♥':'♡')+'</button> <button class="open" data-open="'+p.id+'" aria-expanded="false">Découvrir ↓</button></div></div><div class="detail"><h3>Pourquoi s’y arrêter</h3><p>'+esc(p.story)+'</p><h3>Le détail à observer</h3><p>'+esc(p.look)+'</p><h3>Votre mini-défi à deux</h3><p>'+esc(p.challenge)+'</p><div class="detail-actions"><a target="_blank" rel="noopener" href="'+maps(p)+'">Ouvrir dans Google Maps ↗</a><a target="_blank" rel="noopener" href="'+esc(p.source)+'">Source touristique ↗</a></div></div>';grid.append(card);}}
+function render(){const q=search.value.trim().toLocaleLowerCase('fr');const list=places.filter(p=>(filter==='all'||(filter==='saved'?saved.includes(p.id):p.kind===filter))&&(!q||(p.name+' '+p.area+' '+p.intro+' '+p.tag).toLocaleLowerCase('fr').includes(q)));grid.innerHTML='';if(!list.length){grid.innerHTML='<p class="empty">Aucune découverte ne correspond. Essayez un autre mot ou filtre.</p>';return;}for(const p of list){const card=document.createElement('article');card.className='card';card.id='lieu-'+p.id;const ph=photos[p.id];card.innerHTML='<div class="card-visual"><img class="place-photo" src="'+(ph?ph.url:'https://commons.wikimedia.org/wiki/Special:FilePath/Praha.jpg?width=1200')+'" alt="'+esc(ph?ph.alt:'Vue de Prague')+'" loading="lazy" referrerpolicy="no-referrer"><p class="photo-credit"><a href="'+(ph?ph.source:'https://commons.wikimedia.org/wiki/Prague')+'" target="_blank" rel="noopener">Photo · crédit & licence</a></p></div><div class="card-content"><div class="card-top"><span class="tag">'+esc(p.tag)+'</span><span class="season">'+esc(p.season)+'</span></div><h2>'+esc(p.name)+'</h2><p>'+esc(p.intro)+'</p><div class="card-bottom"><span class="area">'+esc(p.area)+'</span><div><button class="save" data-save="'+p.id+'" aria-label="Ajouter aux favoris" aria-pressed="'+saved.includes(p.id)+'">'+(saved.includes(p.id)?'♥':'♡')+'</button> <button class="open" data-open="'+p.id+'" aria-expanded="false">Découvrir ↓</button></div></div></div><div class="detail"><h3>Pourquoi s’y arrêter</h3><p>'+esc(p.story)+'</p><h3>Le détail à observer</h3><p>'+esc(p.look)+'</p><h3>Votre mini-défi à deux</h3><p>'+esc(p.challenge)+'</p><div class="detail-actions"><a target="_blank" rel="noopener" href="'+maps(p)+'">Ouvrir dans Google Maps ↗</a><a target="_blank" rel="noopener" href="'+esc(p.source)+'">Source touristique ↗</a></div></div>';grid.append(card);}}
 grid.addEventListener('click',e=>{const save=e.target.closest('[data-save]');if(save){const id=save.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];try{localStorage.setItem(key,JSON.stringify(saved))}catch(e){}render();return;}const open=e.target.closest('[data-open]');if(open){const card=open.closest('.card');card.classList.toggle('expanded');open.setAttribute('aria-expanded',String(card.classList.contains('expanded')));open.textContent=card.classList.contains('expanded')?'Refermer ↑':'Découvrir ↓';}});
 filters.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render();}));
 search.addEventListener('input',render);
