@@ -142,7 +142,7 @@ body{font-size:16px;line-height:1.7}
  <div class="map-heading"><div><p class="eyebrow">Les lieux à découvrir</p><h2 id="map-title">La carte de Prague.</h2></div></div>
  <div id="prague-map" aria-label="Carte des découvertes de Prague"></div>
  <div class="map-location-actions"><button id="locate-me" type="button">◎ Ma position</button></div>
- <div class="map-filter" aria-label="Afficher les catégories de repères"><label><input id="show-planned" type="checkbox" checked> <i class="legend-dot planned"></i> Programme</label><label><input id="show-discoveries" type="checkbox" checked> <i class="legend-dot other"></i> Découvertes</label></div>
+ <div class="map-filter" aria-label="Filtres de la carte"><label title="Afficher ou masquer le programme"><input id="show-planned" type="checkbox" checked aria-label="Programme"><i class="legend-dot planned"></i></label><label title="Afficher ou masquer les découvertes"><input id="show-discoveries" type="checkbox" checked aria-label="Découvertes"><i class="legend-dot other"></i></label></div>
  <div class="map-legend"><span><i class="legend-dot planned"></i> Déjà au programme</span><span><i class="legend-dot favorite"></i> Favori</span><span><i class="legend-dot other"></i> À découvrir</span></div><p class="map-foot">Touchez un repère pour voir le lieu et, lorsqu’il est prévu, son créneau ainsi que les étapes avant et après.</p>
 </section>
 <div class="toolbar"><input class="search" id="search" type="search" placeholder="Rechercher un lieu, un quartier…" aria-label="Rechercher une découverte"></div>
@@ -223,7 +223,7 @@ let mapMarkers={};
 let discoveryMap=null;
 let userLocationMarker=null,userAccuracyCircle=null;
 let showPlannedMarkers=true,showDiscoveryMarkers=true;
-function refreshMapVisibility(){Object.keys(mapMarkers).forEach(id=>{const planned=!!plannedInfo[id]||id.startsWith("plan-");const visible=planned?showPlannedMarkers:showDiscoveryMarkers;mapMarkers[id].setOpacity(visible?1:0);mapMarkers[id].setZIndexOffset(planned?500:0);});}
+function refreshMapVisibility(){Object.keys(mapMarkers).forEach(id=>{const planned=!!plannedInfo[id]||id.startsWith("plan-");const favorite=saved.includes(id)&&!planned;const visible=planned?showPlannedMarkers:(favorite||showDiscoveryMarkers);mapMarkers[id].setOpacity(visible?1:0);mapMarkers[id].setZIndexOffset(planned?500:favorite?700:0);});}
 function focusMapPoint(id){const marker=mapMarkers[id];if(!marker||!discoveryMap)return;const point=marker.getLatLng();document.getElementById("map-title").scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>{discoveryMap.invalidateSize();discoveryMap.setView(point,16,{animate:true});marker.openPopup();},350);}
 const plannedInfo={
  'tynska':{date:'Jeudi 10 décembre',time:'17:00',slot:'Monuments de la Vieille-Ville',before:'Arrivée et installation au Kafka Prague rooms, vers 16:00.',after:'Dîner chez Maitrea, proposé à 19:00 (non réservé).'},
