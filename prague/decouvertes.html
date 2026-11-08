@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5f1e8">
+<meta name="theme-color" content="#101a2b">
 <meta name="description" content="Une sélection de lieux insolites, histoires et petits défis pour découvrir Prague autrement.">
 <title>Prague, à deux · Les découvertes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light;--bg:#f5f1e8;--paper:#fffdf8;--ink:#253a34;--muted:#657169;--line:#dedfd5;--accent:#b53c29;--green:#345b47;--serif:'Instrument Serif',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans)}a{color:inherit}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
@@ -27,10 +27,44 @@ main{max-width:1120px;margin:auto;padding:clamp(24px,5vw,56px) clamp(16px,4vw,36
 .nearby-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.nearby-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fffefa;text-align:left;color:var(--ink)}.nearby-item strong{display:block;font:18px/1.1 var(--serif)}.nearby-item span{display:block;color:var(--muted);font-size:10px;margin-top:5px}.map-foot{font-size:10px;color:var(--muted);margin:12px 0 0}
 @media(max-width:650px){#prague-map{height:360px}.nearby-list{grid-template-columns:1fr 1fr}.map-heading h2{font-size:30px}}
 
+
+/* Nouvelle identité — city guide contemporain, immersif et mobile-first */
+:root{color-scheme:light;--bg:#f2f4f7;--paper:#fff;--ink:#111c2e;--muted:#657184;--line:#e3e7ed;--accent:#ff654a;--green:#1c9a82;--serif:'Space Grotesk',system-ui,sans-serif;--sans:'Manrope',system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6}
+header{position:relative;background:#101a2b;color:#fff;border:0;padding:17px clamp(18px,5vw,64px);box-shadow:0 8px 24px #101a2b18}
+.brand{font:800 17px/1 var(--sans);letter-spacing:.11em;color:#fff;display:flex;align-items:center;gap:5px;flex-wrap:wrap}.brand em{font-style:normal;color:#b9f36b}.brand small{display:block;flex-basis:100%;font:600 8px/1 var(--sans);letter-spacing:.22em;color:#9eabc0;margin-top:4px}
+.back{font-size:11px;font-weight:700;color:#dbe4f1;border:1px solid #42506a;border-radius:9px;padding:9px 13px}
+main{max-width:1240px;padding:clamp(22px,4vw,46px) clamp(14px,3vw,34px) 72px}
+.intro{max-width:none;position:relative;overflow:hidden;border-radius:24px;padding:clamp(28px,5vw,58px);background:radial-gradient(ellipse at 85% 20%,#304a70 0,transparent 42%),linear-gradient(125deg,#101a2b 0%,#1a2b43 100%);color:#fff;box-shadow:0 18px 50px #15243a22}
+.intro:after{content:"PRAHA";position:absolute;right:-12px;bottom:-52px;font:700 clamp(100px,22vw,260px)/1 var(--sans);letter-spacing:-.09em;color:#ffffff08;pointer-events:none}
+.eyebrow{position:relative;z-index:1;color:#b9f36b;font-size:10px;letter-spacing:.2em}
+.intro h1{position:relative;z-index:1;font:700 clamp(42px,7vw,82px)/.98 var(--serif);letter-spacing:-.065em;margin:15px 0 16px;max-width:850px}
+.intro p{position:relative;z-index:1;color:#c5d0df;max-width:620px;font-size:14px}
+.note{background:#fff;border:1px solid var(--line);border-left:4px solid #b9f36b;border-radius:12px;padding:14px 17px;color:#596579;font-size:12px;box-shadow:0 5px 18px #14223808}
+.toolbar{margin:30px 0 16px;gap:10px}
+.search{max-width:500px;border:1px solid #dce2eb;border-radius:11px;padding:13px 16px;background:#fff;color:var(--ink);box-shadow:0 3px 12px #14223808}
+.surprise{background:#b9f36b;color:#142238;border-radius:10px;padding:12px 18px;font-size:12px;box-shadow:0 5px 14px #b9f36b35}
+.filters{gap:7px;padding-bottom:14px}.filter{border:1px solid #dfe4eb;background:#fff;border-radius:9px;padding:8px 13px;font-size:11px;font-weight:700;color:#536075}.filter[aria-pressed=true]{background:#101a2b;border-color:#101a2b;color:#fff}
+.map-panel{border:1px solid #e1e6ed;border-radius:20px;padding:clamp(14px,2.5vw,22px);box-shadow:0 12px 35px #1422380c;margin:28px 0 34px}
+.map-heading h2{font:700 34px/1 var(--serif);letter-spacing:-.05em}.map-heading p{font-size:12px}
+.map-action{border-radius:9px;font-weight:700}.map-action.primary{background:#101a2b;border-color:#101a2b}.radius-pills button{border-radius:8px;font-weight:700}.radius-pills button[aria-pressed=true]{background:#eff9dc;border-color:#b9f36b;color:#344d19}
+#prague-map{height:450px;border-radius:14px}
+.nearby-item{border-radius:10px;background:#f8fafc;border-color:#e7ebf0;padding:12px}.nearby-item strong{font:700 16px/1.2 var(--serif);letter-spacing:-.025em}
+.grid{gap:14px}
+.card{border:1px solid #e2e7ed;border-radius:16px;padding:19px;min-height:250px;box-shadow:0 6px 20px #14223808;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 13px 28px #14223812}
+.tag{color:#16836f;font-size:9px;letter-spacing:.12em}.season{border:0;background:#f1f4f7;border-radius:6px;padding:5px 8px;font-size:9px}
+.card h2{font:700 25px/1.08 var(--serif);letter-spacing:-.045em;margin:16px 0 9px}.card p{font-size:12px;line-height:1.65}
+.open{border:0;background:#101a2b;color:white;border-radius:8px;padding:9px 13px;font-size:10px}.save{border-radius:8px;border-color:#e3e7ed}
+.detail{border-color:#e7ebf0}.detail h3{font-size:9px;letter-spacing:.15em;color:#16836f}.detail p{font-size:12px;line-height:1.7}.detail-actions a{border-radius:8px;font-weight:700}
+.footer-note,.map-foot{color:#8590a0;font-size:10px}
+.toast{background:#101a2b;border-radius:10px}
+@media(max-width:650px){header{padding:14px 16px}.brand{font-size:15px}.intro{border-radius:18px;padding:28px 22px}.intro h1{font-size:48px}.intro p{font-size:12px}.toolbar{align-items:stretch}.surprise{width:auto}.search{max-width:none}#prague-map{height:370px}.nearby-list{grid-template-columns:1fr 1fr}.card{min-height:0}.map-heading h2{font-size:30px}}
+
 </style>
 </head>
 <body>
-<header><a class="brand" href="./index.html">Prague, <em>à deux.</em></a><a class="back" href="./index.html">← Retour au carnet</a></header>
+<header><a class="brand" href="./index.html">VOTRE <em>PRAGUE</em><small>LE CITY GUIDE À DEUX</small></a><a class="back" href="./index.html">← Retour au carnet</a></header>
 <main>
 <section class="intro"><p class="eyebrow">L'atlas des curiosités · édition décembre</p><h1>Prague a encore<br>des secrets.</h1><p>Entre deux grands monuments, voici des lieux qui racontent une autre ville : cours cachées, bibliothèques, passages, petites rues et histoires étonnantes. À parcourir à votre rythme, sans transformer le séjour en course.</p></section>
 <div class="note"><strong>Un conseil pour décembre.</strong> Les horaires et accès peuvent varier en hiver. Les jardins et certains sites saisonniers sont signalés ; vérifiez toujours les conditions le jour même. Les lieux résidentiels se découvrent depuis l'espace public, sans entrer dans les propriétés privées. La sélection s'inspire aussi des publications de comptes touristiques locaux comme <a href="https://www.instagram.com/cityofprague/" target="_blank" rel="noopener">@cityofprague</a> et <a href="https://www.instagram.com/praguecitytourism/" target="_blank" rel="noopener">@praguecitytourism</a>, ainsi que de retours de voyageurs. Les réseaux donnent des idées ; les informations pratiques sont recoupées avec les sources touristiques.</div>
