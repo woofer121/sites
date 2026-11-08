@@ -129,6 +129,7 @@ body{font-size:16px;line-height:1.7}
  .map-heading h2{font-size:30px}
  #prague-map{height:390px}
 }
+.map-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted)}.map-legend span{display:inline-flex;align-items:center;gap:7px}.legend-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#26384f}.legend-dot.planned{background:#168b58}.legend-dot.favorite{background:#e53935}.legend-dot.other{background:#26384f}.favorite-map-marker{background:transparent;border:0}
 </style>
 </head>
 <body>
@@ -138,7 +139,7 @@ body{font-size:16px;line-height:1.7}
 <section class="map-panel" aria-labelledby="map-title">
  <div class="map-heading"><div><p class="eyebrow">Les lieux à découvrir</p><h2 id="map-title">La carte de Prague.</h2></div></div>
  <div id="prague-map" aria-label="Carte des découvertes de Prague"></div>
- <p class="map-foot">Carte OpenStreetMap · emplacements indicatifs.</p>
+ <div class="map-legend"><span><i class="legend-dot planned"></i> Déjà au programme</span><span><i class="legend-dot favorite"></i> Favori</span><span><i class="legend-dot other"></i> À découvrir</span></div><p class="map-foot">Touchez un repère pour voir le lieu et, lorsqu’il est prévu, son créneau ainsi que les étapes avant et après.</p>
 </section>
 <div class="toolbar"><input class="search" id="search" type="search" placeholder="Rechercher un lieu, un quartier…" aria-label="Rechercher une découverte"></div>
 <nav class="filters" aria-label="Filtrer les découvertes"><button class="filter" data-filter="all" aria-pressed="true">Tout voir</button><button class="filter" data-filter="histoire" aria-pressed="false">Histoire</button><button class="filter" data-filter="insolite" aria-pressed="false">Insolite</button><button class="filter" data-filter="culture" aria-pressed="false">Culture</button><button class="filter" data-filter="balade" aria-pressed="false">Balade</button><button class="filter" data-filter="saved" aria-pressed="false">♥ Mes favoris</button></nav>
@@ -221,7 +222,14 @@ function initMap(){
  if(!window.L)return;
  const map=L.map('prague-map',{scrollWheelZoom:false}).setView([50.0875,14.4213],13);
  L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{maxZoom:20,subdomains:['a','b','c'],attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}).addTo(map);
- places.forEach(p=>{const point=coords[p.id];if(!point)return;mapMarkers[p.id]=L.marker(point,{icon:markerIcon(saved.includes(p.id))}).addTo(map).bindPopup('<strong>'+esc(p.name)+'</strong><br><a href="#lieu-'+p.id+'" data-map-place="'+p.id+'">Voir la découverte ↓</a>');});
+ const plannedInfo={
+ 'tynska':{date:'Jeudi 10 décembre',time:'17:00',slot:'Monuments de la Vieille-Ville',before:'Arrivée et installation au Kafka Prague rooms, vers 16:00.',after:'Dîner chez Maitrea, proposé à 19:00 (non réservé).'},
+ 'certovka-canal':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Mur Lennon, Čertovka et Kampa',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'},
+ 'babies-kampa':{date:'Vendredi 11 décembre',time:'15:15–16:15',slot:'Balade à Kampa (secteur prévu)',before:'Nerudova et Saint-Nicolas, 14:30–15:15.',after:'Pont Charles et ses tours, 16:15–17:00.'}
+};
+function markerIcon(isSaved,isPlanned){const color=isPlanned?'#168b58':isSaved?'#e53935':'#26384f';const glyph=isPlanned&&isSaved?'♥':isPlanned?'✓':isSaved?'♥':'';const html='<span style="display:flex;align-items:center;justify-content:center;width:29px;height:29px;border:3px solid #fff;border-radius:50%;background:'+color+';box-shadow:0 2px 8px #101a2b66;color:'+(isPlanned&&isSaved?'#ffdddd':'#fff')+';font:700 14px/1 Arial">'+glyph+'</span>';return L.divIcon({className:'favorite-map-marker',html:html,iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-14]});}
+function updateMapMarkers(){Object.keys(mapMarkers).forEach(id=>mapMarkers[id].setIcon(markerIcon(saved.includes(id),!!plannedInfo[id])));}
+places.forEach(p=>{const point=coords[p.id];if(!point)return;const info=plannedInfo[p.id];let popup='<strong>'+esc(p.name)+'</strong>';if(info){popup+='<div style="margin:7px 0;padding:8px 10px;background:#eaf6ef;border-radius:9px;color:#17633f"><b>✓ Déjà au programme</b><br>'+esc(info.date)+' · '+esc(info.time)+'<br><b>'+esc(info.slot)+'</b><br><br><b>Avant :</b> '+esc(info.before)+'<br><b>Après :</b> '+esc(info.after)+'</div>';}popup+='<a href="#lieu-'+p.id+'" data-map-place="'+p.id+'">Voir la découverte ↓</a>';mapMarkers[p.id]=L.marker(point,{icon:markerIcon(saved.includes(p.id),!!info)}).addTo(map).bindPopup(popup);});
  setTimeout(()=>map.invalidateSize(),150);
 }
 document.getElementById('prague-map').addEventListener('click',e=>{const a=e.target.closest('[data-map-place]');if(a){const card=document.getElementById('lieu-'+a.dataset.mapPlace);if(card){card.classList.add('expanded');card.scrollIntoView({behavior:'smooth',block:'center'});}}});
