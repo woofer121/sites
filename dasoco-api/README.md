@@ -1,20 +1,23 @@
 # Envoi des demandes de contact
 
-Le formulaire du site transmet les demandes à ce petit service Node.js, qui les envoie via Resend. La clé API reste côté serveur et n'est jamais exposée au navigateur.
+Le formulaire du site transmet les demandes à ce service Node.js, qui les envoie via le serveur SMTP Gmail. Les identifiants restent côté serveur et ne sont jamais exposés au navigateur.
 
 ## Variables Render à définir sur le service `dasoco-mail`
 
-- `RESEND_API_KEY` : clé API Resend (secret).
-- `CONTACT_FROM` : expéditeur appartenant à un domaine vérifié dans Resend, par exemple `DASOCO <contact@dasoco.fr>`.
-- `CONTACT_TO` : destinataire (par défaut `yohan.sube@gmail.com`).
+- `GMAIL_USER` : adresse Gmail complète utilisée pour l'envoi.
+- `GMAIL_APP_PASSWORD` : mot de passe d'application Google (secret de 16 caractères, sans espaces). Ne jamais utiliser le mot de passe normal du compte.
+- `CONTACT_TO` : adresse destinataire (par défaut la valeur de `GMAIL_USER`).
 - `ALLOWED_ORIGIN` : `https://dasoco.onrender.com`.
 
-## Activation
+## Activation avec un compte Gmail personnel
 
-1. Créer un compte Resend et ajouter le domaine d'envoi (idéalement `dasoco.fr`).
-2. Publier les enregistrements DNS SPF/DKIM fournis par Resend chez le gestionnaire DNS du domaine.
-3. Créer une clé API Resend et l'ajouter dans les variables d'environnement Render, sans la mettre dans GitHub.
-4. Définir `CONTACT_FROM` avec une adresse du domaine vérifié.
-5. Vérifier `https://dasoco-mail.onrender.com/health` : `configured` doit être `true`.
+1. Activer la validation en deux étapes du compte Google.
+2. Créer un mot de passe d'application depuis https://myaccount.google.com/apppasswords.
+3. Dans Render, ouvrir le service `dasoco-mail`, puis Environment.
+4. Ajouter `GMAIL_USER` et `GMAIL_APP_PASSWORD`. Saisir le mot de passe d'application directement dans Render, jamais dans GitHub ou dans une conversation.
+5. Enregistrer les changements et attendre le redéploiement.
+6. Vérifier `https://dasoco-mail.onrender.com/health` : `configured` doit être `true`.
 
-Le service limite les envois par adresse IP, valide les champs et utilise un champ piège anti-robots.
+Le service utilise SMTP Gmail sur `smtp.gmail.com:465` en TLS. Un compte Gmail personnel est soumis aux limites d'envoi de Google (jusqu'à 500 messages par jour selon la documentation Gmail). Le service limite aussi les envois par adresse IP, valide les champs et utilise un champ piège anti-robots.
+
+Quand DASOCO disposera à nouveau d'un domaine, il sera possible de revenir à un fournisseur transactionnel et à une adresse professionnelle sur ce domaine.
