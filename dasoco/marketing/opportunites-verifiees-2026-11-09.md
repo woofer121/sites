@@ -2,7 +2,17 @@
 
 > **Important :** opportunités publiques de prestations, **aucun client acquis ni candidature déposée**. Les avis, heures et conditions doivent être confirmés dans le DCE officiel avant réponse. Ce fichier ne contient aucune donnée personnelle. Aucun budget publicitaire ni frais de plateforme engagé.
 
-## Pipeline des besoins explicites
+## Politique commerciale actualisée — 9 novembre 2026
+
+**DASOCO ne recherche plus de gros appels d'offres à ce stade.** L'entreprise est une microstructure et privilégie uniquement les missions à périmètre limité : petit logiciel métier, formulaire, automatisation, utilitaire, tableau de bord, prototype ou développement ponctuel réalisable sans équipe dédiée ni maintenance lourde.
+
+Les projets publics ci-dessous de centaines de milliers d'euros, avec migration de SI, prestations pluriannuelles, déploiement SaaS complexe ou fortes exigences d'assurance / continuité sont **classés HORS PÉRIMÈTRE — ARCHIVES DOCUMENTAIRES**, et ne doivent plus être proposés comme opportunités actives ni faire l'objet de prospection. Ne pas lancer de veille sur ces gros marchés.
+
+**Cibles à rechercher en priorité :** demandes explicites de TPE/PME, petites missions de développement sur plateformes freelance, lots limités en sous-traitance pour agences web, petits projets documentaires, applications simples, correction d'outils internes. Écarter aussi les missions demandant une disponibilité proche d'un emploi à temps plein si elle n'est pas établie.
+
+Les montants, dates et états historiques ci-dessous restent des notes de recherche ; ne pas les interpréter comme des clients gagnés ou des candidatures déposées.
+
+## Archives documentaires — gros appels d’offres HORS PÉRIMÈTRE
 
 | Priorité | Acheteur / besoin | Clôture (heure de Paris à vérifier dans RC) | Montant annoncé | Adéquation DASOCO / réserves | Source publique | Statut |
 |---|---|---|---|---|---|---|
