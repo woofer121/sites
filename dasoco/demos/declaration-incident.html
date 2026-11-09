@@ -1,33 +1,159 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101b2d"><meta name="description" content="Simulateur de déclaration d'incident DASOCO : formulaire de signalement, photos et suivi de démonstration."><title>Déclaration d'incident — Démonstration DASOCO</title>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<meta name="description" content="Démonstration DASOCO : déclaration et suivi d'incident.">
+<title>Déclaration d'incident — DASOCO</title>
 <style>
-:root{--n:#101b2d;--b:#3979e8;--c:#35c9bb;--bg:#f3f6fb;--l:#e3e9f2;--m:#718096;--t:#1c2b40;--red:#d9485f}*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.5 Inter,system-ui,sans-serif;color:var(--t)}button,input,select,textarea{font:inherit}button{cursor:pointer}.top{background:var(--n);color:#fff;padding:17px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{font-weight:900;letter-spacing:.12em}.brand span{color:var(--c)}.top a{color:#d8e5f3;text-decoration:none;font-size:12px}.wrap{max-width:1120px;margin:auto;padding:30px 20px 55px}.intro{margin-bottom:22px}.eyebrow{font-size:10px;font-weight:850;letter-spacing:.13em;color:var(--b);text-transform:uppercase}.intro h1{font-size:clamp(25px,4vw,36px);letter-spacing:-.04em;margin:7px 0}.intro p{color:var(--m);margin:0;max-width:720px}.notice{border:1px solid #f0d7a7;background:#fff8e8;color:#815a1b;padding:12px 15px;border-radius:11px;font-size:12px;margin:18px 0 22px}.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:18px;align-items:start}.panel{background:white;border:1px solid var(--l);border-radius:15px;padding:22px;box-shadow:0 8px 26px #101b2d0b}.panel h2{font-size:17px;margin:0 0 5px}.sub{color:var(--m);font-size:12px;margin:0 0 20px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid #d5deea;border-radius:9px;padding:11px 12px;background:#fff;color:var(--t)}.field textarea{min-height:100px;resize:vertical}.choice{display:flex;gap:8px;flex-wrap:wrap}.choice label{border:1px solid #d5deea;border-radius:9px;padding:10px 12px;cursor:pointer;font-size:12px;font-weight:700}.choice input{accent-color:var(--b)}.help{font-size:10px;color:var(--m)}.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 15px;font-weight:800}.primary{background:var(--b);color:#fff}.light{background:#fff;border:1px solid var(--l);color:var(--t)}.sidecard{margin-bottom:14px}.sidecard h3{margin:0 0 8px;font-size:14px}.sidecard p,.sidecard li{font-size:12px;color:var(--m)}.sidecard ul{padding-left:18px;margin:8px 0}.pill{display:inline-block;border-radius:30px;padding:5px 9px;background:#edf4ff;color:#2457a4;font-size:10px;font-weight:850}.result{display:none;margin-top:18px;border:1px solid #b7e5db;background:#effbf7;border-radius:12px;padding:15px}.result strong{color:#087c69}.result p{margin:5px 0 0;font-size:12px;color:#43665e}.history{margin-top:18px}.history table{width:100%;border-collapse:collapse;font-size:11px}.history th,.history td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--l)}.history th{color:var(--m)}.empty{color:var(--m);font-size:12px;padding:12px 0}.preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--l)}footer{text-align:center;color:var(--m);font-size:11px;padding:24px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}.wrap{padding:22px 14px 40px}.panel{padding:17px}}@media(max-width:480px){.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{padding:14px}}
-</style></head><body>
-<header class="top"><a class="brand" href="../index.html">= DASOCO<span>()</span></a><a href="../index.html#realisations">← Retour aux démonstrations</a></header>
-<main class="wrap"><div class="intro"><div class="eyebrow">Application métier · Démonstration interactive</div><h1>Déclarer un incident</h1><p>Un formulaire guidé pour signaler un problème sur un équipement ou un véhicule, préciser son impact, joindre des photos et retrouver les déclarations réalisées.</p></div>
-<div class="notice"><b>Mode démonstration :</b> les données sont fictives et restent dans ce navigateur. Aucun signalement réel n'est transmis, aucun e-mail n'est envoyé et aucun service externe n'est connecté.</div>
-<div class="layout"><section class="panel"><h2>Nouveau signalement</h2><p class="sub">Les champs marqués d'un * sont obligatoires.</p>
-<form id="incidentForm"><div class="formgrid">
-<div class="field"><label for="asset">Équipement / véhicule concerné *</label><select id="asset" required><option value="">Choisir un équipement…</option><option>Véhicule utilitaire · VH-024</option><option>Camion benne · VH-108</option><option>Engin de chantier · EQ-016</option><option>Groupe électrogène · EQ-031</option><option>Autre équipement</option></select></div>
-<div class="field"><label for="location">Localisation</label><input id="location" placeholder="Site, dépôt, adresse…"></div>
-<div class="field"><label>Réparable en interne ? *</label><div class="choice"><label><input type="radio" name="repair" value="Oui" checked> Oui</label><label><input type="radio" name="repair" value="Non"> Non</label><label><input type="radio" name="repair" value="À déterminer"> À déterminer</label></div></div>
-<div class="field"><label for="impact">Impact sur l'activité *</label><select id="impact" required><option value="Utilisable avec gêne">Utilisable avec gêne</option><option value="Immobilisé">Immobilisé / bloqué</option></select></div>
-<div class="field"><label for="priority">Priorité *</label><select id="priority" required><option value="Standard">Standard</option><option value="Prioritaire">Prioritaire</option><option value="Contrôle réglementaire">Contrôle réglementaire</option></select></div>
-<div class="field"><label for="reporter">Nom du déclarant *</label><input id="reporter" required placeholder="Votre nom"></div>
-<div class="field full"><label for="description">Description précise de l'incident *</label><textarea id="description" required placeholder="Décrivez le problème constaté, les circonstances et les éventuels symptômes…"></textarea></div>
-<div class="field full"><label for="comment">Commentaire complémentaire</label><input id="comment" placeholder="Précisions ou consignes particulières…"></div>
-<div class="field full"><label for="photos">Photos de l'incident (3 maximum)</label><input id="photos" type="file" accept="image/*" multiple><span class="help">Les images sont uniquement prévisualisées ; elles ne sont pas envoyées.</span><div class="preview" id="preview"></div></div>
-</div><div class="actions"><button class="btn primary" type="submit">Envoyer le signalement de démonstration →</button><button class="btn light" type="reset">Réinitialiser</button></div></form>
-<div class="result" id="result" role="status"></div></section>
-<aside><div class="panel sidecard"><span class="pill">Parcours simulé</span><h3 style="margin-top:12px">Du signalement au suivi</h3><ul><li>Identification de l'équipement</li><li>Localisation et évaluation de l'impact</li><li>Qualification de la priorité</li><li>Description et ajout de photos</li><li>Création d'une référence de suivi</li></ul></div><div class="panel sidecard"><h3>Ce que cet outil peut simplifier</h3><p>Un formulaire unique, des informations structurées dès le départ et une référence pour retrouver chaque déclaration. Les champs et les étapes peuvent être adaptés à votre organisation.</p></div></aside></div>
-<section class="panel history"><h2>Déclarations de cette session</h2><p class="sub">Les signalements créés dans cette démonstration apparaissent ici.</p><div id="history"><p class="empty">Aucune déclaration pour le moment.</p></div></section>
-</main><footer>DASOCO · Concept de démonstration · Données fictives</footer>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--ink:#17243b;--muted:#77849a;--blue:#315eea;--blue2:#244bd0;--pale:#edf2ff;--line:#e7ebf2;--bg:#f5f7fb;--white:#fff;--teal:#1aa58c;--shadow:0 18px 55px rgba(31,48,82,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100% - 1180px)/2));}
+.brand{font:800 19px 'Manrope',sans-serif;letter-spacing:.11em;color:var(--ink);text-decoration:none}.brand span{color:var(--blue)}
+.back{color:#68758b;text-decoration:none;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}.back:hover{color:var(--blue)}
+.shell{max-width:1180px;margin:auto;padding:42px 24px 70px}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:27px}
+.kicker{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:800}
+.kicker:before{content:"";width:20px;height:2px;background:var(--blue);border-radius:5px}
+h1,h2,h3,p{margin-top:0}h1{font:800 clamp(29px,4vw,39px)/1.15 'Manrope',sans-serif;letter-spacing:-1.5px;margin:10px 0 9px}
+.lead{max-width:650px;color:var(--muted);font-size:14px;margin:0}
+.demo-tag{flex:none;border:1px solid #dce5ff;background:#f0f4ff;color:#3155c5;border-radius:30px;padding:9px 13px;font-size:11px;font-weight:800;display:flex;align-items:center;gap:7px}
+.demo-tag i{width:7px;height:7px;border-radius:50%;background:#6889f2;display:inline-block}
+.demo-note{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #e8eaf0;border-radius:12px;padding:14px 17px;margin-bottom:22px;color:#69768b;font-size:12px}
+.note-icon{width:25px;height:25px;flex:none;border-radius:8px;background:#fff4df;color:#a56c12;display:grid;place-items:center;font-weight:900}
+.demo-note strong{color:#35435a}
+.columns{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+.form-card{padding:27px 29px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:21px;border-bottom:1px solid #edf0f5;margin-bottom:22px}
+.card-head h2{font:800 18px 'Manrope',sans-serif;margin:0 0 4px;letter-spacing:-.3px}
+.card-head p{margin:0;color:var(--muted);font-size:12px}
+.step{background:#f3f6ff;color:#4765c5;border-radius:8px;padding:6px 9px;font-size:10px;font-weight:800;white-space:nowrap}
+.section-title{display:flex;align-items:center;gap:10px;margin:25px 0 15px}
+.section-title:first-of-type{margin-top:0}
+.section-num{width:25px;height:25px;border-radius:8px;background:var(--pale);color:var(--blue);display:grid;place-items:center;font-size:11px;font-weight:800}
+.section-title h3{font:800 13px 'Manrope',sans-serif;margin:0}
+.section-title span{color:#9aa5b5;font-size:11px;margin-left:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{min-width:0;display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+.field>label,.field-label{font-size:11px;font-weight:800;color:#39475d}
+.required{color:#e05b68}
+.field input:not([type=radio]):not([type=file]),.field select,.field textarea{width:100%;border:1px solid #dfe5ee;border-radius:9px;padding:11px 12px;background:#fff;color:var(--ink);outline:none;transition:border .18s,box-shadow .18s;font-size:12px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#8da7ff;box-shadow:0 0 0 3px #315eea14}
+.field input::placeholder,.field textarea::placeholder{color:#aab3c1}
+.field textarea{min-height:112px;resize:vertical}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2377849a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.hint{font-size:10px;color:#98a3b3}
+.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choice{position:relative}.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer}
+.choice label{min-height:43px;border:1px solid #e0e6ef;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;color:#657187;font-size:11px;font-weight:700;cursor:pointer;transition:.15s}
+.choice label:before{content:"";width:13px;height:13px;border:1.5px solid #c4cedc;border-radius:50%;background:white}
+.choice input:checked+label{border-color:#8da7ff;background:#f3f6ff;color:#3155c5;box-shadow:inset 0 0 0 1px #8da7ff}
+.choice input:checked+label:before{border:4px solid var(--blue)}
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.impact{position:relative}.impact input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer}
+.impact label{border:1px solid #e0e6ef;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;min-height:63px}
+.impact .symbol{width:32px;height:32px;border-radius:9px;background:#f1f4f9;color:#68758b;display:grid;place-items:center;font-size:15px}
+.impact b{display:block;font-size:11px;color:#35435a}.impact small{display:block;color:#929daf;font-size:10px;margin-top:2px}
+.impact input:checked+label{border-color:#8da7ff;background:#f5f7ff;box-shadow:inset 0 0 0 1px #8da7ff}
+.impact input:checked+label .symbol{background:#e5ebff;color:var(--blue)}
+.priority-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.priority{position:relative}.priority input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer}
+.priority label{border:1px solid #e0e6ef;border-radius:9px;padding:10px 8px;text-align:center;display:block;font-size:10px;font-weight:800;color:#68758b;cursor:pointer}
+.priority input:checked+label{border-color:#8da7ff;background:#f3f6ff;color:#3155c5;box-shadow:inset 0 0 0 1px #8da7ff}
+.upload{border:1px dashed #cbd5e4;background:#fafbfe;border-radius:11px;padding:17px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:.15s}
+.upload:hover{border-color:#8da7ff;background:#f7f9ff}
+.upload-icon{width:38px;height:38px;border-radius:10px;background:#edf2ff;color:var(--blue);display:grid;place-items:center;font-size:18px;flex:none}
+.upload strong{display:block;font-size:11px;color:#39475d}.upload small{display:block;color:#98a3b3;font-size:10px;margin-top:3px}
+.upload input{display:none}.preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.preview img{width:65px;height:65px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
+.actions{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid #edf0f5}
+.btn{border:0;border-radius:9px;padding:12px 17px;font-size:11px;font-weight:800;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}.primary{background:var(--blue);color:#fff;box-shadow:0 6px 14px #315eea2b}.primary:hover{background:var(--blue2)}
+.secondary{background:#fff;border:1px solid #e0e6ef;color:#657187}
+.side{display:grid;gap:14px}.side-card{padding:20px}
+.side-card h3{font:800 13px 'Manrope',sans-serif;margin:0 0 14px}
+.progress{display:flex;align-items:center;gap:10px;margin:13px 0}
+.progress-num{width:25px;height:25px;border-radius:8px;background:#edf2ff;color:#315eea;display:grid;place-items:center;font-size:10px;font-weight:800;flex:none}
+.progress b{font-size:11px;display:block}.progress small{font-size:10px;color:#929daf;display:block;margin-top:1px}
+.progress-line{height:1px;background:#edf0f5;margin-left:12px}
+.tip{background:#f5f7ff;border:1px solid #e7ecff;border-radius:12px;padding:15px}
+.tip-head{display:flex;align-items:center;gap:8px;color:#3155c5;font-size:11px;font-weight:800;margin-bottom:7px}
+.tip p{font-size:11px;color:#71809a;margin:0;line-height:1.6}
+.side-foot{font-size:10px;color:#9aa4b3;text-align:center;padding:3px 10px}
+.result{display:none;margin-top:20px;border:1px solid #bce7db;background:#f0fbf7;border-radius:12px;padding:16px}
+.result strong{color:#087d68;font-size:13px}.result p{margin:5px 0 0;color:#54766d;font-size:11px}
+.history-card{margin-top:20px;padding:23px 27px}.history-card h2{font:800 16px 'Manrope',sans-serif;margin:0 0 4px}.history-card>p{font-size:11px;color:var(--muted);margin:0 0 15px}
+.history table{width:100%;border-collapse:collapse;font-size:11px}.history th,.history td{text-align:left;padding:11px 8px;border-bottom:1px solid #edf0f5}.history th{color:#8a96a8;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.history td:first-child{font-weight:800;color:#3155c5}.empty{font-size:11px;color:#98a3b3;padding:12px 0}
+footer{text-align:center;color:#9aa4b3;font-size:10px;padding:28px}
+@media(max-width:850px){.columns{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.hero{align-items:flex-start;flex-direction:column}.demo-tag{align-self:flex-start}}
+@media(max-width:560px){.topbar{height:62px;padding:0 17px}.brand{font-size:16px}.back{font-size:10px}.shell{padding:29px 14px 45px}.form-card{padding:20px 16px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.choice-grid,.priority-grid{grid-template-columns:1fr}.choice label{justify-content:flex-start;padding-left:13px}.side{grid-template-columns:1fr}.history-card{padding:19px 15px;overflow-x:auto}.history table{min-width:560px}.actions{flex-direction:column;align-items:stretch}.btn{width:100%}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="../index.html">= DASOCO<span>()</span></a><a class="back" href="../index.html#realisations">← <span>Retour aux démonstrations</span></a></header>
+<main class="shell">
+<section class="hero"><div><div class="kicker">Outil métier · Démonstration</div><h1>Déclarer un incident</h1><p class="lead">Un signalement simple, structuré et complet pour faciliter la prise en charge de vos équipements et véhicules.</p></div><div class="demo-tag"><i></i> Version interactive de démonstration</div></section>
+<div class="demo-note"><div class="note-icon">i</div><div><strong>Vous êtes dans un environnement de démonstration.</strong> Les données saisies restent dans ce navigateur. Aucun signalement réel n'est transmis et aucun e-mail n'est envoyé.</div></div>
+<div class="columns">
+<section class="card form-card">
+<div class="card-head"><div><h2>Nouveau signalement</h2><p>Renseignez les informations pour créer une fiche incident.</p></div><span class="step">ÉTAPE 1 / 1</span></div>
+<form id="incidentForm">
+<div class="section-title"><span class="section-num">01</span><h3>Équipement concerné</h3><span>Identification</span></div>
+<div class="grid">
+<div class="field"><label for="asset">Équipement / véhicule <span class="required">*</span></label><select id="asset" required><option value="">Sélectionner un équipement</option><option>Véhicule utilitaire · VH-024</option><option>Camion benne · VH-108</option><option>Engin de chantier · EQ-016</option><option>Groupe électrogène · EQ-031</option><option>Autre équipement</option></select></div>
+<div class="field"><label for="location">Lieu de l'incident</label><input id="location" placeholder="Site, dépôt, adresse…"></div>
+</div>
+<div class="section-title"><span class="section-num">02</span><h3>Impact et prise en charge</h3><span>Qualification</span></div>
+<div class="grid">
+<div class="field full"><span class="field-label">L'équipement est-il réparable en interne ? <span class="required">*</span></span><div class="choice-grid">
+<div class="choice"><input id="repairYes" type="radio" name="repair" value="Oui" checked><label for="repairYes">Oui</label></div>
+<div class="choice"><input id="repairNo" type="radio" name="repair" value="Non"><label for="repairNo">Non</label></div>
+<div class="choice"><input id="repairMaybe" type="radio" name="repair" value="À déterminer"><label for="repairMaybe">À déterminer</label></div>
+</div></div>
+<div class="field full"><span class="field-label">Conséquence sur l'activité <span class="required">*</span></span><div class="impact-grid">
+<div class="impact"><input id="impactOk" type="radio" name="impact" value="Utilisable avec gêne" checked><label for="impactOk"><span class="symbol">◷</span><span><b>Utilisable avec gêne</b><small>Activité maintenue</small></span></label></div>
+<div class="impact"><input id="impactStop" type="radio" name="impact" value="Immobilisé"><label for="impactStop"><span class="symbol">Ⅱ</span><span><b>Immobilisé</b><small>Équipement à l'arrêt</small></span></label></div>
+</div></div>
+<div class="field full"><span class="field-label">Niveau de priorité <span class="required">*</span></span><div class="priority-grid">
+<div class="priority"><input id="prioNormal" type="radio" name="priority" value="Standard" checked><label for="prioNormal">Standard</label></div>
+<div class="priority"><input id="prioHigh" type="radio" name="priority" value="Prioritaire"><label for="prioHigh">Prioritaire</label></div>
+<div class="priority"><input id="prioVgp" type="radio" name="priority" value="Contrôle réglementaire"><label for="prioVgp">Contrôle / VGP</label></div>
+</div></div>
+</div>
+<div class="section-title"><span class="section-num">03</span><h3>Description de l'incident</h3><span>Informations</span></div>
+<div class="grid">
+<div class="field full"><label for="description">Que s'est-il passé ? <span class="required">*</span></label><textarea id="description" required placeholder="Décrivez le problème constaté, les circonstances et les éventuels symptômes…"></textarea><span class="hint">Soyez aussi précis que possible pour faciliter le diagnostic.</span></div>
+<div class="field"><label for="reporter">Nom du déclarant <span class="required">*</span></label><input id="reporter" required placeholder="Votre nom"></div>
+<div class="field"><label for="comment">Commentaire complémentaire</label><input id="comment" placeholder="Précision ou consigne…"></div>
+</div>
+<div class="section-title"><span class="section-num">04</span><h3>Ajouter des photos</h3><span>Facultatif</span></div>
+<div class="field full"><label class="upload" for="photos"><span class="upload-icon">＋</span><span><strong>Ajouter des photos de l'incident</strong><small>Images JPG, PNG ou WEBP · 3 photos maximum</small></span><input id="photos" type="file" accept="image/*" multiple></label><span class="hint">Les photos sont prévisualisées localement et ne sont pas envoyées.</span><div class="preview" id="preview"></div></div>
+<div class="actions"><button class="btn primary" type="submit">Créer le signalement <span aria-hidden="true">→</span></button><button class="btn secondary" type="reset">Réinitialiser le formulaire</button></div>
+</form><div class="result" id="result" role="status" aria-live="polite"></div>
+</section>
+<aside class="side">
+<div class="card side-card"><h3>Votre déclaration en 4 temps</h3>
+<div class="progress"><span class="progress-num">01</span><span><b>Identifier</b><small>Choisir l'équipement concerné</small></span></div><div class="progress-line"></div>
+<div class="progress"><span class="progress-num">02</span><span><b>Qualifier</b><small>Préciser l'impact et la priorité</small></span></div><div class="progress-line"></div>
+<div class="progress"><span class="progress-num">03</span><span><b>Décrire</b><small>Expliquer et illustrer l'incident</small></span></div><div class="progress-line"></div>
+<div class="progress"><span class="progress-num">04</span><span><b>Retrouver</b><small>Obtenir une référence de suivi</small></span></div>
+</div>
+<div class="tip"><div class="tip-head">✦ Un outil adapté à vos équipes</div><p>Les champs, les niveaux de priorité et le circuit de traitement peuvent être ajustés à vos équipements, à votre organisation et à vos habitudes de travail.</p></div>
+<div class="side-foot">Démonstration sans transmission de données</div>
+</aside>
+</div>
+<section class="card history-card"><h2>Historique des signalements</h2><p>Les déclarations créées pendant cette session apparaîtront ici.</p><div class="history" id="history"><p class="empty">Aucun signalement pour le moment.</p></div></section>
+</main>
+<footer>DASOCO · Des outils numériques conçus autour de vos besoins</footer>
 <script>
 const KEY='dasoco_incident_demo_v1';let incidents=[];try{incidents=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){incidents=[]}
 const $=id=>document.getElementById(id);
-function render(){if(!incidents.length){$('history').innerHTML='<p class="empty">Aucune déclaration pour le moment.</p>';return} $('history').innerHTML='<table><thead><tr><th>Référence</th><th>Date</th><th>Équipement</th><th>Impact</th><th>Priorité</th></tr></thead><tbody>'+incidents.map(x=>'<tr><td><b>'+x.ref+'</b></td><td>'+x.date+'</td><td>'+x.asset+'</td><td>'+x.impact+'</td><td>'+x.priority+'</td></tr>').join('')+'</tbody></table>'}
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function render(){if(!incidents.length){$('history').innerHTML='<p class="empty">Aucun signalement pour le moment.</p>';return}$('history').innerHTML='<table><thead><tr><th>Référence</th><th>Date</th><th>Équipement</th><th>Impact</th><th>Priorité</th></tr></thead><tbody>'+incidents.map(x=>'<tr><td>'+safe(x.ref)+'</td><td>'+safe(x.date)+'</td><td>'+safe(x.asset)+'</td><td>'+safe(x.impact)+'</td><td>'+safe(x.priority)+'</td></tr>').join('')+'</tbody></table>'}
 $('photos').addEventListener('change',e=>{const files=[...e.target.files];if(files.length>3){alert('Vous pouvez joindre 3 photos maximum.');e.target.value='';return}$('preview').innerHTML='';files.forEach(f=>{if(!f.type.startsWith('image/'))return;const img=document.createElement('img');img.alt='Aperçu de la photo';img.src=URL.createObjectURL(f);$('preview').appendChild(img)})});
-$('incidentForm').addEventListener('submit',e=>{e.preventDefault();const id=Date.now();const item={ref:'#INC-'+String(id).slice(-6),date:new Date().toLocaleString('fr-FR'),asset:$('asset').value,location:$('location').value,repair:document.querySelector('input[name="repair"]:checked').value,impact:$('impact').value,priority:$('priority').value,reporter:$('reporter').value,description:$('description').value,comment:$('comment').value};incidents.unshift(item);incidents=incidents.slice(0,30);try{localStorage.setItem(KEY,JSON.stringify(incidents))}catch(err){}$('result').style.display='block';$('result').innerHTML='<strong>✓ Signalement simulé créé — '+item.ref+'</strong><p>La fiche est ajoutée à la liste ci-dessous. Aucune transmission réelle n’a été effectuée.</p>';$('result').scrollIntoView({behavior:'smooth',block:'nearest'});render()});
+$('incidentForm').addEventListener('submit',e=>{e.preventDefault();const id=Date.now();const item={ref:'#INC-'+String(id).slice(-6),date:new Date().toLocaleString('fr-FR'),asset:$('asset').value,location:$('location').value,repair:document.querySelector('input[name="repair"]:checked').value,impact:document.querySelector('input[name="impact"]:checked').value,priority:document.querySelector('input[name="priority"]:checked').value,reporter:$('reporter').value,description:$('description').value,comment:$('comment').value};incidents.unshift(item);incidents=incidents.slice(0,30);try{localStorage.setItem(KEY,JSON.stringify(incidents))}catch(err){}$('result').style.display='block';$('result').innerHTML='<strong>✓ Signalement de démonstration créé · '+safe(item.ref)+'</strong><p>La fiche apparaît dans l’historique ci-dessous. Aucune transmission réelle n’a été effectuée.</p>';$('result').scrollIntoView({behavior:'smooth',block:'nearest'});render()});
 $('incidentForm').addEventListener('reset',()=>setTimeout(()=>$('preview').innerHTML='',0));render();
-</script></body></html>
+</script>
+</body></html>
