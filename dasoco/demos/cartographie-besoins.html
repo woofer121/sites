@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#172b57"><meta name="description" content="Démonstration de cartographie interactive des besoins d'un territoire."><title>Cartographie des besoins — DASOCO</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
+:root{--navy:#14264a;--blue:#3867ed;--teal:#11b6a0;--orange:#f5a642;--pink:#ed7185;--purple:#8c68e8;--ink:#1c2c49;--muted:#71809a;--line:#e6ebf3;--bg:#f4f7fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:13px/1.5 'DM Sans',sans-serif;color:var(--ink)}a{text-decoration:none;color:inherit}
+.top{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 1380px)/2))}
+.brand{font:800 18px Manrope;letter-spacing:.1em}.brand span{color:var(--blue)}.back{font-size:11px;font-weight:800;color:#64738d}
+.shell{max-width:1380px;margin:auto;padding:28px 22px 50px}
+.hero{background:linear-gradient(115deg,#1c3b9a,#3867ed 54%,#0da997);border-radius:20px;padding:27px 30px;color:white;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 18px 40px #315eea25}
+.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#c8fff4;font-weight:800}.hero h1{font:800 clamp(25px,3.3vw,36px)/1.15 Manrope;margin:9px 0}.hero p{margin:0;color:#e2eaff;max-width:700px;font-size:13px}
+.live{border:1px solid #ffffff55;background:#ffffff1c;padding:9px 12px;border-radius:30px;white-space:nowrap;font-size:10px;font-weight:800}.live i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#7df2c4;margin-right:7px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:17px 0}
+.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 17px;box-shadow:0 8px 24px #1a31500a;position:relative;overflow:hidden}
+.metric:after{content:"";position:absolute;right:-13px;top:-20px;width:70px;height:70px;border-radius:50%;background:var(--wash)}
+.metric small{display:block;color:#8290a5;font-size:10px;font-weight:700}.metric strong{font:800 26px Manrope;display:block;margin-top:2px}.metric em{font-style:normal;font-size:10px;color:var(--muted)}
+.metric:nth-child(1){--wash:#e7edff}.metric:nth-child(1) strong{color:var(--blue)}.metric:nth-child(2){--wash:#dcf8f0}.metric:nth-child(2) strong{color:#079c83}.metric:nth-child(3){--wash:#fff0d9}.metric:nth-child(3) strong{color:#d58a22}.metric:nth-child(4){--wash:#fce7ec}.metric:nth-child(4) strong{color:#d95b76}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 325px;gap:15px;align-items:stretch}
+.map-panel,.side-panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 32px #1a31500b;overflow:hidden}
+.map-head{padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
+.map-head h2,.side-panel h2{font:800 14px Manrope;margin:0}.map-head p{font-size:10px;color:var(--muted);margin:3px 0 0}
+.filters{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line)}
+.filter{border:1px solid #e1e7f0;background:#fff;color:#63718a;border-radius:30px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}
+.filter.active{background:#edf2ff;border-color:#aebfff;color:#3158d8}
+#map{height:550px;width:100%;background:#eaf0f6}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:12px 16px;color:#738098;font-size:10px;border-top:1px solid var(--line)}
+.legend span{display:flex;align-items:center;gap:6px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.side-panel{padding:17px}.side-panel h2{margin-bottom:12px}
+.new-btn{width:100%;border:0;border-radius:10px;background:linear-gradient(110deg,#3867ed,#7457df);color:#fff;padding:11px;font-size:11px;font-weight:800;cursor:pointer;box-shadow:0 7px 16px #3867ed35}
+.list{display:grid;gap:8px;margin-top:13px;max-height:365px;overflow:auto}
+.need{border:1px solid var(--line);border-radius:11px;padding:10px;cursor:pointer;transition:.15s}.need:hover{border-color:#aebfff;background:#f8faff}
+.need-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.need b{font-size:11px}.need p{font-size:10px;color:var(--muted);margin:5px 0 0}
+.tag{font-size:9px;font-weight:800;border-radius:20px;padding:4px 7px;background:#f0f3f8;color:#66758c}.priority{font-size:9px;font-weight:800}.urgent{color:#d6536c}.normal{color:#d08a20}.low{color:#159b83}
+.detail{margin-top:13px;padding:12px;border-radius:11px;background:linear-gradient(120deg,#eff3ff,#e9fbf6);font-size:10px;color:#64738c;min-height:62px}.detail b{display:block;color:#263a62;font-size:11px;margin-bottom:4px}
+.modal{display:none;position:fixed;inset:0;background:#14264a88;z-index:1000;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.dialog{width:min(470px,100%);background:white;border-radius:17px;padding:22px;box-shadow:0 25px 80px #14264a44}.dialog-head{display:flex;justify-content:space-between;align-items:center}.dialog h2{font:800 17px Manrope;margin:0}.close{border:0;background:#f0f3f8;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px}.field{display:grid;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:10px;font-weight:800;color:#52617a}.field input,.field select,.field textarea{width:100%;border:1px solid #dce3ee;border-radius:9px;padding:10px;font:12px 'DM Sans';outline:none}.field textarea{min-height:70px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#829cff;box-shadow:0 0 0 3px #3867ed17}
+.hint{font-size:9px;color:#98a3b3}.submit{grid-column:1/-1;border:0;border-radius:9px;padding:12px;background:#3867ed;color:#fff;font-size:11px;font-weight:800;cursor:pointer}
+footer{text-align:center;color:#98a3b3;padding:22px;font-size:10px}
+.leaflet-popup-content-wrapper{border-radius:12px}.leaflet-popup-content{font:11px 'DM Sans';margin:12px 14px}.map-pin{width:30px;height:30px;border:3px solid #fff;border-radius:50% 50% 50% 5px;transform:rotate(-45deg);box-shadow:0 3px 9px #1a315055;display:grid;place-items:center}.map-pin span{transform:rotate(45deg);font-size:12px}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.side-panel{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side-panel h2,.new-btn{grid-column:1/-1}.list{max-height:250px}.hero{align-items:flex-start;flex-direction:column}.live{align-self:flex-start}}
+@media(max-width:600px){.top{height:60px;padding:0 15px}.shell{padding:18px 12px 35px}.hero{padding:22px 19px}.metrics{grid-template-columns:1fr 1fr;gap:8px}.metric{padding:12px}.metric strong{font-size:22px}.map-head{align-items:flex-start;flex-direction:column}#map{height:420px}.side-panel{display:block}.form{grid-template-columns:1fr}.field.full,.submit{grid-column:auto}}
+</style></head><body>
+<header class="top"><a class="brand" href="../index.html">= DASOCO<span>()</span></a><a class="back" href="../index.html#realisations">← Retour aux démonstrations</a></header>
+<main class="shell">
+<section class="hero"><div><div class="kicker">Cartographie & pilotage · Démonstration</div><h1>Les besoins du territoire, en un coup d'œil.</h1><p>Centralisez les demandes, repérez les zones prioritaires et transformez les observations du terrain en décisions concrètes.</p></div><div class="live"><i></i> CARTE INTERACTIVE</div></section>
+<section class="metrics">
+<div class="metric"><small>BESOINS RECENSÉS</small><strong id="mTotal">24</strong><em>sur le territoire</em></div>
+<div class="metric"><small>À TRAITER EN PRIORITÉ</small><strong id="mUrgent">7</strong><em>situations signalées</em></div>
+<div class="metric"><small>ZONES CONCERNÉES</small><strong id="mZones">8</strong><em>secteurs différents</em></div>
+<div class="metric"><small>CATÉGORIES</small><strong>4</strong><em>types de besoins</em></div>
+</section>
+<section class="workspace">
+<div class="map-panel"><div class="map-head"><div><h2>Vue cartographique</h2><p>Exemple de territoire — données entièrement fictives</p></div><span class="tag">LYON · EXEMPLE</span></div>
+<div class="filters" id="filters"><button class="filter active" data-filter="Tous">Tous les besoins</button><button class="filter" data-filter="Mobilité">🚲 Mobilité</button><button class="filter" data-filter="Cadre de vie">🌳 Cadre de vie</button><button class="filter" data-filter="Accessibilité">♿ Accessibilité</button><button class="filter" data-filter="Services">✨ Services</button></div>
+<div id="map" role="application" aria-label="Carte interactive des besoins fictifs à Lyon"></div>
+<div class="legend"><span><i class="dot" style="background:#ed7185"></i> Priorité haute</span><span><i class="dot" style="background:#f5a642"></i> À planifier</span><span><i class="dot" style="background:#11b6a0"></i> À étudier</span></div></div>
+<aside class="side-panel"><div><h2>Explorer les besoins</h2><p style="font-size:10px;color:#8290a5;margin:4px 0 0">Sélectionnez un point sur la carte ou dans la liste.</p></div><button class="new-btn" id="addBtn">＋ Ajouter un besoin sur la carte</button><div class="list" id="needList"></div><div class="detail" id="detail"><b>Vue d'ensemble</b>Cliquez sur un besoin pour afficher sa fiche et sa localisation.</div></aside>
+</section>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><div class="dialog-head"><h2 id="modalTitle">Ajouter un besoin</h2><button class="close" id="close" aria-label="Fermer">×</button></div><p style="font-size:11px;color:#8290a5;margin:7px 0 0">Cliquez d'abord sur la carte pour placer le point, puis décrivez le besoin.</p><form class="form" id="needForm"><div class="field full"><label for="title">Intitulé du besoin</label><input id="title" required maxlength="70" placeholder="Ex. Traversée piétonne à sécuriser"></div><div class="field"><label for="category">Catégorie</label><select id="category"><option>Mobilité</option><option>Cadre de vie</option><option>Accessibilité</option><option>Services</option></select></div><div class="field"><label for="priority">Priorité</label><select id="priority"><option>Haute</option><option>À planifier</option><option>À étudier</option></select></div><div class="field full"><label for="zone">Secteur / quartier</label><input id="zone" required maxlength="60" placeholder="Nom du quartier"></div><div class="field full"><label for="description">Description</label><textarea id="description" maxlength="240" placeholder="Décrivez le besoin observé…"></textarea></div><div class="field full"><span class="hint" id="coords">Emplacement à sélectionner sur la carte.</span></div><button class="submit" type="submit">Ajouter à la cartographie</button></form></div></div>
+<footer>DASOCO · Démonstration interactive · Données fictives, non représentatives d'un diagnostic réel</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const palette={'Mobilité':'#3867ed','Cadre de vie':'#11b6a0','Accessibilité':'#8c68e8','Services':'#f5a642'};
+const initial=[
+['Passage piéton à sécuriser','Mobilité','Haute','Part-Dieu','Traversée fréquentée à rendre plus lisible.',45.7608,4.8594],
+['Espace vert à végétaliser','Cadre de vie','À étudier','Guillotière','Potentiel de végétalisation d'un espace minéral.',45.7522,4.8421],
+['Accès PMR à améliorer','Accessibilité','Haute','Presqu’île','Cheminement avec ressauts et obstacles.',45.7581,4.8330],
+['Point de collecte à repositionner','Services','À planifier','Croix-Rousse','Étudier un emplacement plus pratique pour les usagers.',45.7781,4.8270],
+['Éclairage à renforcer','Cadre de vie','À planifier','Jean Macé','Zone piétonne peu éclairée en soirée.',45.7456,4.8425],
+['Piste cyclable à connecter','Mobilité','Haute','Gerland','Discontinuité sur un itinéraire cyclable.',45.7294,4.8312],
+['Accès aux services à simplifier','Services','À étudier','Vaise','Besoin d'information et d'orientation des habitants.',45.7802,4.8050],
+['Trottoir à rendre accessible','Accessibilité','Haute','Confluence','Largeur utile insuffisante à certains endroits.',45.7415,4.8157],
+['Zone de repos à créer','Cadre de vie','À étudier','Brotteaux','Demande d'assises et d'ombre à proximité.',45.7687,4.8580],
+['Stationnement vélo à compléter','Mobilité','À planifier','Saxe-Gambetta','Besoin de stationnement vélo sécurisé.',45.7528,4.8474],
+['Signalétique à clarifier','Services','À étudier','Bellecour','Orientation des visiteurs à améliorer.',45.7578,4.8320],
+['Cheminement piéton à apaiser','Accessibilité','À planifier','Monplaisir','Conflits d'usage à étudier sur le cheminement.',45.7447,4.8712]
+];
+let needs=initial.map((x,i)=>({id:i+1,title:x[0],category:x[1],priority:x[2],zone:x[3],description:x[4],lat:x[5],lng:x[6]}));
+const map=L.map('map',{scrollWheelZoom:false}).setView([45.758,4.842],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
+let markers=[],activeFilter='Tous',pending=null;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function icon(n){const color=n.priority==='Haute'?'#ed7185':n.priority==='À planifier'?'#f5a642':'#11b6a0';return L.divIcon({className:'',html:'<div class="map-pin" style="background:'+color+'"><span>•</span></div>',iconSize:[30,36],iconAnchor:[15,32],popupAnchor:[0,-30]})}
+function visible(){return needs.filter(n=>activeFilter==='Tous'||n.category===activeFilter)}
+function selectNeed(n){$('detail').innerHTML='<b>'+esc(n.title)+'</b>'+esc(n.zone)+' · '+esc(n.category)+'<br>'+esc(n.description)+'<br><span class="priority '+(n.priority==='Haute'?'urgent':n.priority==='À planifier'?'normal':'low')+'">Priorité '+esc(n.priority.toLowerCase())+'</span>';map.setView([n.lat,n.lng],15,{animate:true})}
+function render(){markers.forEach(m=>map.removeLayer(m));markers=[];visible().forEach(n=>{const m=L.marker([n.lat,n.lng],{icon:icon(n)}).addTo(map).bindPopup('<b>'+esc(n.title)+'</b><br>'+esc(n.zone)+' · '+esc(n.category)+'<br><small>Priorité : '+esc(n.priority)+'</small>');m.on('click',()=>selectNeed(n));markers.push(m)});$('needList').innerHTML=visible().map(n=>'<article class="need" data-id="'+n.id+'"><div class="need-top"><b>'+esc(n.title)+'</b><span class="tag">'+esc(n.category)+'</span></div><p>'+esc(n.zone)+' · <span class="priority '+(n.priority==='Haute'?'urgent':n.priority==='À planifier'?'normal':'low')+'">'+esc(n.priority)+'</span></p></article>').join('')||'<p class="hint">Aucun besoin dans cette catégorie.</p>';document.querySelectorAll('.need').forEach(el=>el.addEventListener('click',()=>{const n=needs.find(x=>x.id===Number(el.dataset.id));if(n)selectNeed(n)}));$('mTotal').textContent=needs.length;$('mUrgent').textContent=needs.filter(n=>n.priority==='Haute').length;$('mZones').textContent=new Set(needs.map(n=>n.zone)).size}
+$('filters').addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});
+$('addBtn').addEventListener('click',()=>{$('modal').classList.add('open');$('title').focus()});$('close').addEventListener('click',()=>{$('modal').classList.remove('open')});$('modal').addEventListener('click',e=>{if(e.target===$('modal'))$('modal').classList.remove('open')});
+map.on('click',e=>{pending=e.latlng;$('coords').textContent='Position choisie : '+pending.lat.toFixed(5)+', '+pending.lng.toFixed(5);$('modal').classList.add('open')});
+$('needForm').addEventListener('submit',e=>{e.preventDefault();if(!pending){$('coords').textContent='Cliquez sur la carte pour choisir un emplacement.';return}const n={id:Date.now(),title:$('title').value.trim(),category:$('category').value,priority:$('priority').value,zone:$('zone').value.trim(),description:$('description').value.trim()||'Aucune précision complémentaire.',lat:pending.lat,lng:pending.lng};needs.unshift(n);pending=null;e.target.reset();$('modal').classList.remove('open');activeFilter='Tous';document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x.dataset.filter==='Tous'));render();selectNeed(n)});
+render();setTimeout(()=>map.invalidateSize(),250);
+</script></body></html>
