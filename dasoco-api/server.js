@@ -96,7 +96,7 @@ const server = http.createServer(async (req, res) => {
       const company = clean(data.company, 160);
       const email = clean(data.email, 254);
       const need = clean(data.need, 5000);
-      if (!name || !need || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+      if (!name || !need || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return send(res, 400, { error: "Merci de vérifier les champs obligatoires." });
       }
       if (!RESEND_API_KEY) {
@@ -105,10 +105,10 @@ const server = http.createServer(async (req, res) => {
 
       const result = await sendWithResend({
         replyTo: email,
-        subject: "Demande de contact DASOCO - " + (company || name).replace(/[\\r\\n]+/g, " "),
-        text: "Nouvelle demande depuis le site DASOCO\\n\\nNom : " + name +
-          "\\nEntreprise : " + (company || "Non précisée") +
-          "\\nE-mail : " + email + "\\n\\nBesoin :\\n" + need
+        subject: "Demande de contact DASOCO - " + (company || name).replace(/[\r\n]+/g, " "),
+        text: "Nouvelle demande depuis le site DASOCO\n\nNom : " + name +
+          "\nEntreprise : " + (company || "Non précisée") +
+          "\nE-mail : " + email + "\n\nBesoin :\n" + need
       });
       console.log("Contact email accepted by Resend:", result.id || "id indisponible");
       return send(res, 200, { ok: true });
