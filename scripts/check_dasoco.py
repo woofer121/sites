@@ -41,6 +41,9 @@ def local_path(href, source):
 
 pages = {}
 for file in ROOT.rglob("*.html"):
+    # Les fichiers de validation Google ne sont pas des pages HTML et ne doivent pas être modifiés.
+    if file.name.startswith("google") and file.name.endswith(".html"):
+        continue
     p = Page()
     try:
         p.feed(file.read_text(encoding="utf-8"))
