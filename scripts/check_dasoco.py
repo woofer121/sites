@@ -14,6 +14,7 @@ class Page(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.assets = []
         self.canonical = []
         self.robots = []
         self.title = False
@@ -21,6 +22,10 @@ class Page(HTMLParser):
         d = dict(attrs)
         if tag == "a" and d.get("href"):
             self.links.append(d["href"])
+        if tag in ("img", "script", "iframe", "video", "audio", "source") and d.get("src"):
+            self.assets.append(d["src"])
+        if tag == "link" and any(k in str(d.get("rel", "")).split() for k in ("stylesheet", "icon", "preload", "modulepreload")) and d.get("href"):
+            self.assets.append(d["href"])
         if tag == "link" and d.get("rel") == "canonical":
             self.canonical.append(d.get("href", ""))
         if tag == "meta" and d.get("name") == "robots":
@@ -57,6 +62,10 @@ for file in ROOT.rglob("*.html"):
         target = local_path(href, file)
         if target and not target.resolve().is_file():
             errors.append(f"{file.relative_to(ROOT)}: lien cassé {href}")
+    for src in p.assets:
+        target = local_path(src, file)
+        if target and not target.resolve().is_file():
+            errors.append(f"{file.relative_to(ROOT)}: ressource manquante {src}")
 
 sitemap = ROOT / "sitemap.xml"
 try:
@@ -82,4 +91,4 @@ except Exception as exc:
 if errors:
     print("\n".join("ERREUR " + x for x in errors))
     sys.exit(1)
-print(f"OK : {len(pages)} pages HTML, {len(locs)} URLs sitemap, liens internes contrôlés")
+print(f"OK : {len(pages)} pages HTML, {len(locs)} URLs sitemap, liens internes et ressources locales contrôlés")
