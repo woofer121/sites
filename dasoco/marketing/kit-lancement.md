@@ -143,3 +143,67 @@ Distinguer systématiquement le fait observé de l'hypothèse DASOCO. Un secteur
 ## Appel à l'action de référence
 
 **Vous avez une idée d'application, un outil métier à créer ou un logiciel qui ne répond pas à votre besoin ? Présentez votre projet à DASOCO : https://dasoco.onrender.com/**
+
+
+## Plan de visibilité organique — 4 semaines (préparation, pas publication automatique)
+
+**Objectif :** obtenir des visites qualifiées et des demandes de premier échange, sans utiliser le profil LinkedIn personnel et sans publicité payante.
+
+**Canal principal :** page LinkedIn entreprise DASOCO. **Destination :** https://dasoco.onrender.com/#contact. **Preuves :** les cinq démonstrations explicitement identifiées comme concepts fictifs.
+
+| Semaine | Angle | Publication proposée | Destination | Indicateur |
+| --- | --- | --- | --- | --- |
+| 1 | Problème métier | « Quand le logiciel impose ses contraintes » | Accueil / contact | Visites du site, demandes |
+| 2 | Preuve par le produit | Présenter la mini-GMAO interactive, sans la qualifier de projet client | /demos/mini-gmao.html | Clics vers la démo |
+| 3 | Méthode | Expliquer comment cadrer une application en partant d'un besoin simple | #methode | Échanges qualifiés |
+| 4 | Cas d'usage | Montrer comment centraliser les demandes d'intervention avec la démo | /demos/suivi-demandes.html | Clics vers la démo, demandes |
+
+**Rythme proposé :** une publication par semaine, uniquement après validation explicite du texte et du visuel. Pas de republication depuis le profil personnel.
+
+### Brouillon de publication — mini-GMAO (à valider)
+
+Un équipement en panne. Une intervention à planifier. Un historique difficile à retrouver.
+
+Quand les informations sont dispersées, suivre la maintenance devient compliqué.
+
+Une application métier peut réunir les équipements, les signalements, les interventions et les échéances dans un même espace.
+
+Pour illustrer cette approche, DASOCO propose une **mini-GMAO interactive de démonstration**. Ce concept utilise des données fictives : ce n'est pas une réalisation client.
+
+Découvrez la démonstration : https://dasoco.onrender.com/demos/mini-gmao.html
+
+Vous avez un besoin similaire, mais avec vos propres règles métier ? Parlons de votre projet.
+
+#ApplicationMétier #GMAO #LogicielSurMesure #PME #DASOCO
+
+### Brouillon de publication — suivi des interventions (à valider)
+
+Une demande reçue par e-mail. Une autre par téléphone. Une troisième notée dans un fichier.
+
+Comment garder une vue claire sur les priorités, les responsables et l'avancement ?
+
+DASOCO présente un **concept interactif de suivi des interventions** pour illustrer comment une application métier peut centraliser ces informations.
+
+Il s'agit d'une démonstration avec données fictives, pas d'une référence client.
+
+Explorer le concept : https://dasoco.onrender.com/demos/suivi-demandes.html
+
+Vos processus ne rentrent pas dans les outils standards ? Vos idées méritent leurs propres outils.
+
+#SuiviDesInterventions #ApplicationWeb #SolutionsNumériques #DASOCO
+
+### Distribution sans démarchage
+
+- Ajouter le site officiel à la page LinkedIn entreprise et vérifier que la présentation et la bannière correspondent à l'identité du site.
+- Partager depuis **la page entreprise uniquement**, après accord, des extraits des démonstrations et des explications de cas d'usage.
+- Construire une liste de prospects B2B nationaux à partir de besoins publics vérifiables, puis préparer des approches personnalisées **sans envoi automatique**.
+- Préparer des pages de contenu utiles sur les problèmes métier (maintenance, interventions, portails clients) ; ne pas promettre de positions Google.
+- Ne pas acheter d'abonnés, de vues, de backlinks ou de publicités.
+
+### Mesure hebdomadaire
+
+Relever séparément : impressions et clics des publications, visites de la page entreprise, visites du site si une mesure fiable est installée, demandes via le formulaire, échanges qualifiés. Indiquer « non mesuré » plutôt que zéro si aucune donnée n'est disponible. Ne jamais attribuer une demande à LinkedIn sans preuve.
+
+### Confidentialité et validation
+
+Ne pas utiliser le profil LinkedIn personnel, ni l'employeur, ni les collègues pour promouvoir DASOCO. Aucun message commercial, commentaire ou publication publique sans accord préalable. Les outils de publication doivent cibler exclusivement la page DASOCO.
