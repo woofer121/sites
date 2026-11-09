@@ -49,6 +49,7 @@ async function sendWithResend({ replyTo, subject, text }) {
 }
 
 const server = http.createServer(async (req, res) => {
+  const pathname = new URL(req.url, "http://localhost").pathname;
   const origin = req.headers.origin || "";
   if (origin && origin !== ALLOWED_ORIGIN) return send(res, 403, { error: "Origine non autorisée." });
 
@@ -62,7 +63,7 @@ const server = http.createServer(async (req, res) => {
     return res.end();
   }
 
-  if (req.method === "GET" && req.url === "/health") {
+  if (req.method === "GET" && pathname === "/health") {
     return send(res, 200, {
       ok: true,
       configured: Boolean(RESEND_API_KEY),
@@ -70,7 +71,7 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  if (req.method !== "POST" || req.url !== "/api/contact") {
+  if (req.method !== "POST" || pathname !== "/api/contact") {
     return send(res, 404, { error: "Route introuvable." });
   }
 
