@@ -157,7 +157,7 @@ const server = http.createServer(async (req, res) => {
       });
       return send(res, 200, { ok: true }, ALLOWED_ORIGIN);
     } catch (error) {
-      console.error("Contact endpoint error:", error.message);
+      console.error("Contact endpoint error:", error?.stack || error?.message || String(error));
       return send(res, 502, { error: "L'envoi a échoué. Réessayez ou contactez-nous directement." }, ALLOWED_ORIGIN);
     }
   });
