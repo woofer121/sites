@@ -1,0 +1,22 @@
+name: DASOCO - SEO et liens internes
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dasoco/**'
+      - 'scripts/check_dasoco.py'
+      - '.github/workflows/dasoco-quality.yml'
+  pull_request:
+    paths:
+      - 'dasoco/**'
+      - 'scripts/check_dasoco.py'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Contrôler les liens et le sitemap DASOCO
+        run: python3 scripts/check_dasoco.py
