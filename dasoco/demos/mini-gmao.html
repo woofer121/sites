@@ -33,7 +33,7 @@ maintenance:[
 {id:"MP-204",title:"Entretien compresseur",asset:"EQ-001",frequency:"Semestrielle",owner:"Atelier mécanique",due:"2026-11-18",state:"À venir"},
 {id:"MP-205",title:"Contrôle pompe",asset:"EQ-003",frequency:"Trimestrielle",owner:"Équipe maintenance",due:"2026-12-02",state:"À venir"}],
 activity:[["Intervention OT-1048 prise en charge","Atelier mécanique · aujourd'hui"],["Nouvelle demande sur le groupe de ventilation","Sophie R. · aujourd'hui"],["OT-1046 clôturée après réparation","Atelier mécanique · 06 nov."],["Échéance de contrôle approchante","Chariot élévateur · 05 nov."]]};
-let db;try{db=JSON.parse(localStorage.getItem("dasoco-gmao-demo"))||structuredClone(initial)}catch(e){db=structuredClone(initial)}let seq=1049;
+let db;try{db=JSON.parse(localStorage.getItem("dasoco-gmao-demo"))||structuredClone(initial)}catch(e){db=structuredClone(initial)}let seq=Math.max(1048,...db.orders.map(o=>Number(String(o.id).split("-")[1])||0));
 const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),asset=id=>db.assets.find(a=>a.id===id)||{name:"Équipement inconnu"},dt=s=>s?new Date(s+"T12:00:00").toLocaleDateString("fr-FR"):"—";
 function save(){localStorage.setItem("dasoco-gmao-demo",JSON.stringify(db))}
 function tag(s){let c=({Urgente:"red",Haute:"amber",Normale:"blue","À l'arrêt":"red","À surveiller":"amber","En service":"green","En cours":"blue","À planifier":"red",Planifiée:"blue","En attente":"amber",Terminée:"green","En retard":"red","À venir":"amber",Réalisée:"green"})[s]||"";return '<span class="pill '+c+'">'+esc(s)+'</span>'}
