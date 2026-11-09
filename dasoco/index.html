@@ -199,7 +199,7 @@ const projectLabels={
 const projectKey=new URLSearchParams(window.location.search).get('projet');
 const needField=document.getElementById('need');
 if(projectKey && Object.hasOwn(projectLabels,projectKey) && !needField.value.trim()){
-  needField.value='Je souhaite échanger sur : '+projectLabels[projectKey]+'.\\n\\nContexte et besoin : ';
+  needField.value='Je souhaite échanger sur : '+projectLabels[projectKey]+'.\n\nContexte et besoin : ';
 }
 
 leadForm.addEventListener('submit',async function(e){
