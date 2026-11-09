@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101a2b">
+<meta name="theme-color" content="#f7f5f0">
 <meta name="description" content="Une sélection de lieux insolites, histoires et petits défis pour découvrir Prague autrement.">
 <title>Prague, à deux · Les découvertes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,6 +132,42 @@ body{font-size:16px;line-height:1.7}
  #prague-map{height:390px}
 }
 .map-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted)}.map-legend span{display:inline-flex;align-items:center;gap:7px}.legend-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#26384f}.legend-dot.planned{background:#168b58}.legend-dot.favorite{background:#e53935}.legend-dot.other{background:#26384f}.favorite-map-marker{background:transparent;border:0}.map-location-actions{display:flex;justify-content:flex-end;margin:8px 0 2px}.map-location-actions button{border:1px solid #cbd5e1;border-radius:20px;background:#fff;color:#17243a;padding:7px 12px;font:600 12px/1.2 var(--sans);box-shadow:0 2px 8px #101a2b12}.map-location-actions button:active{transform:scale(.98)}
+
+/* Identité Prague partagée — douceur contemporaine */
+:root{color-scheme:light;--bg:#f7f5f0;--paper:#fffefa;--ink:#263e3a;--muted:#71817a;--line:#e3e8df;--accent:#b96e58;--green:#648778;--serif:'Space Grotesk',system-ui,sans-serif;--sans:'Manrope',system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink)}
+header{background:var(--paper);color:var(--ink);border-bottom:1px solid var(--line);box-shadow:0 4px 20px #3552460a}
+.brand{color:var(--ink);font-weight:800;letter-spacing:.04em}
+.brand em{color:#a86a55}.brand small{color:#7d9287}
+.back{color:#527363;background:#eef3ed;border-color:#dce8dd;border-radius:12px;font-size:12px}
+main{padding-top:clamp(16px,3vw,30px)}
+.map-panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 7px 28px #3552460c;margin:10px 0 26px}
+.map-heading h2{color:var(--ink);font-size:clamp(25px,4vw,34px);letter-spacing:-.05em}
+.map-heading .eyebrow{color:#799486;letter-spacing:.14em;font-weight:800}
+#prague-map{border-radius:14px;background:#e7ede5}
+.map-filter label{background:#f2f6f0;border-color:#dfe9df;border-radius:12px;padding:8px 10px;min-height:38px}
+.map-filter #locate-me{background:#eaf1e9;border-color:#d7e4d9;color:#416c58;border-radius:12px;min-height:38px;padding:8px 13px;box-shadow:none}
+.map-legend{color:#71817a;gap:8px 16px;font-size:12px}
+.toolbar{margin-top:24px}.search{background:var(--paper);border-color:var(--line);border-radius:13px;box-shadow:0 4px 14px #35524608}
+.filters{gap:8px}.filter{background:var(--paper);border-color:var(--line);border-radius:12px;color:#547064;font-weight:750}
+.filter[aria-pressed=true]{background:#dfece2;color:#345e4c;border-color:#bad2c0}
+.grid{gap:14px}.card{background:var(--paper);border-color:var(--line);border-radius:17px;box-shadow:0 5px 20px #3552460a}
+.card:hover{box-shadow:0 9px 24px #35524614;transform:translateY(-1px)}
+.place-photo{border-radius:12px;background:#e5ece5}
+.card .tag{color:#6c9180}.card h2{color:var(--ink)}
+.card-content>p{color:#72827a}
+.card .open{background:#648778;color:#fff;border-radius:10px}
+.card .save{border-color:#e1e8df;border-radius:10px;color:#6c897b}
+.card .save[aria-pressed=true]{color:#bc6658;border-color:#e8c7bf;background:#fcf1ec}
+.map-card-button{background:#edf3ed;color:#4f7967;border-color:#dce7dd;border-radius:10px}
+.detail{border-color:var(--line)}.detail h3{color:#a76654}.detail p{color:#455b54}
+.detail-actions a{background:#f2f6f0;border-color:#dfe8de;border-radius:11px;color:#476a59}
+.leaflet-popup-content-wrapper{background:#fffefa;border-radius:14px}
+.leaflet-popup-content a{color:#a9604d}
+.footer-note a{color:#567a69}
+button:focus-visible,a:focus-visible,input:focus-visible{outline-color:#9ebba8}
+@media(max-width:650px){header{padding:14px 16px}.brand{font-size:14px}.back{font-size:11px}.map-panel{padding:13px}.card{padding:12px}.map-heading h2{font-size:28px}.map-legend{font-size:11px}}
+
 </style>
 </head>
 <body>
