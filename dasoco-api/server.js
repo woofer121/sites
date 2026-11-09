@@ -1,18 +1,17 @@
 const http = require("node:http");
-const tls = require("node:tls");
 
 const PORT = process.env.PORT || 10000;
-const GMAIL_USER = process.env.GMAIL_USER || "";
-const GMAIL_APP_PASSWORD = (process.env.GMAIL_APP_PASSWORD || "").replace(/\s/g, "");
-const TO_EMAIL = process.env.CONTACT_TO || GMAIL_USER;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const TO_EMAIL = process.env.CONTACT_TO || "yohan.sube@gmail.com";
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://dasoco.onrender.com";
+const FROM_EMAIL = process.env.RESEND_FROM || "DASOCO <onboarding@resend.dev>";
 const requests = new Map();
 
-function send(res, status, payload, origin) {
+function send(res, status, payload) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
-    "Access-Control-Allow-Origin": origin || ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
     "Vary": "Origin",
     "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
     "Access-Control-Allow-Headers": "Content-Type"
@@ -24,82 +23,34 @@ function clean(value, max) {
   return String(value || "").trim().slice(0, max);
 }
 
-function smtpReplyReader(socket) {
-  let buffer = "";
-  const lines = [];
-  const waiters = [];
-  function flush() {
-    while (waiters.length && lines.some(line => /^\d{3} /.test(line))) {
-      const waiter = waiters.shift();
-      const end = lines.findIndex(line => /^\d{3} /.test(line));
-      waiter.resolve(lines.splice(0, end + 1));
-    }
-  }
-  socket.on("data", chunk => {
-    buffer += chunk.toString("utf8");
-    const parts = buffer.split(/\r?\n/);
-    buffer = parts.pop();
-    for (const line of parts) if (line) lines.push(line);
-    flush();
+async function sendWithResend({ replyTo, subject, text }) {
+  if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY absente");
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + RESEND_API_KEY,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [TO_EMAIL],
+      reply_to: replyTo,
+      subject,
+      text
+    }),
+    signal: AbortSignal.timeout(20000)
   });
-  return () => new Promise((resolve, reject) => {
-    const waiter = { resolve, reject };
-    waiters.push(waiter);
-    flush();
-    socket.once("error", reject);
-    socket.once("close", () => reject(new Error("Connexion SMTP fermée")));
-  });
-}
-
-async function sendGmail({ to, replyTo, subject, text }) {
-  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) throw new Error("Configuration Gmail absente");
-  const socket = tls.connect({ host: "smtp.gmail.com", port: 465, servername: "smtp.gmail.com" });
-  socket.setTimeout(15000, () => socket.destroy(new Error("Délai SMTP dépassé")));
-  const readReply = smtpReplyReader(socket);
-  const expect = async (codes, command) => {
-    if (command) socket.write(command + "\r\n");
-    const lines = await readReply();
-    const code = Number(lines[lines.length - 1].slice(0, 3));
-    if (!codes.includes(code)) throw new Error("Réponse SMTP inattendue : " + code);
-  };
-  try {
-    await new Promise((resolve, reject) => {
-      socket.once("secureConnect", resolve);
-      socket.once("error", reject);
-    });
-    await expect([220]);
-    await expect([250], "EHLO dasoco.onrender.com");
-    await expect([334], "AUTH LOGIN");
-    await expect([334], Buffer.from(GMAIL_USER).toString("base64"));
-    await expect([235], Buffer.from(GMAIL_APP_PASSWORD).toString("base64"));
-    await expect([250], "MAIL FROM:<" + GMAIL_USER + ">");
-    await expect([250, 251], "RCPT TO:<" + to + ">");
-    await expect([354], "DATA");
-
-    const encodedSubject = "=?UTF-8?B?" + Buffer.from(subject).toString("base64") + "?=";
-    const encodedBody = Buffer.from(text, "utf8").toString("base64").match(/.{1,76}/g).join("\r\n");
-    const message = [
-      "From: DASOCO <" + GMAIL_USER + ">",
-      "To: <" + to + ">",
-      "Reply-To: <" + replyTo + ">",
-      "Subject: " + encodedSubject,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=UTF-8",
-      "Content-Transfer-Encoding: base64",
-      "",
-      encodedBody,
-      "."
-    ].join("\r\n");
-    await expect([250], message);
-    await expect([221], "QUIT");
-  } finally {
-    socket.end();
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const reason = result.message || result.name || ("HTTP " + response.status);
+    throw new Error("Resend API (" + response.status + "): " + reason);
   }
+  return result;
 }
 
 const server = http.createServer(async (req, res) => {
   const origin = req.headers.origin || "";
-  if (origin && origin !== ALLOWED_ORIGIN) return send(res, 403, { error: "Origine non autorisée." }, ALLOWED_ORIGIN);
+  if (origin && origin !== ALLOWED_ORIGIN) return send(res, 403, { error: "Origine non autorisée." });
 
   if (req.method === "OPTIONS") {
     res.writeHead(204, {
@@ -112,17 +63,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "GET" && req.url === "/health") {
-    return send(res, 200, { ok: true, configured: Boolean(GMAIL_USER && GMAIL_APP_PASSWORD) }, ALLOWED_ORIGIN);
+    return send(res, 200, {
+      ok: true,
+      configured: Boolean(RESEND_API_KEY),
+      provider: "resend"
+    });
   }
 
   if (req.method !== "POST" || req.url !== "/api/contact") {
-    return send(res, 404, { error: "Route introuvable." }, ALLOWED_ORIGIN);
+    return send(res, 404, { error: "Route introuvable." });
   }
 
   const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || "unknown";
   const now = Date.now();
   const recent = (requests.get(ip) || []).filter(t => now - t < 15 * 60 * 1000);
-  if (recent.length >= 8) return send(res, 429, { error: "Trop de demandes. Réessayez dans quelques minutes." }, ALLOWED_ORIGIN);
+  if (recent.length >= 8) return send(res, 429, { error: "Trop de demandes. Réessayez dans quelques minutes." });
   recent.push(now);
   requests.set(ip, recent);
 
@@ -134,31 +89,31 @@ const server = http.createServer(async (req, res) => {
   req.on("end", async () => {
     try {
       const data = JSON.parse(raw || "{}");
-      if (clean(data.website, 200)) return send(res, 200, { ok: true }, ALLOWED_ORIGIN);
+      if (clean(data.website, 200)) return send(res, 200, { ok: true });
 
       const name = clean(data.name, 120);
       const company = clean(data.company, 160);
       const email = clean(data.email, 254);
       const need = clean(data.need, 5000);
-      if (!name || !need || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return send(res, 400, { error: "Merci de vérifier les champs obligatoires." }, ALLOWED_ORIGIN);
+      if (!name || !need || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+        return send(res, 400, { error: "Merci de vérifier les champs obligatoires." });
       }
-      if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
-        return send(res, 503, { error: "Le service d'envoi n'est pas encore configuré." }, ALLOWED_ORIGIN);
+      if (!RESEND_API_KEY) {
+        return send(res, 503, { error: "Le service d'envoi n'est pas encore configuré." });
       }
 
-      await sendGmail({
-        to: TO_EMAIL,
+      const result = await sendWithResend({
         replyTo: email,
-        subject: "Demande de contact DASOCO - " + (company || name),
-        text: "Nouvelle demande depuis le site DASOCO\n\nNom : " + name +
-          "\nEntreprise : " + (company || "Non précisée") +
-          "\nE-mail : " + email + "\n\nBesoin :\n" + need
+        subject: "Demande de contact DASOCO - " + (company || name).replace(/[\\r\\n]+/g, " "),
+        text: "Nouvelle demande depuis le site DASOCO\\n\\nNom : " + name +
+          "\\nEntreprise : " + (company || "Non précisée") +
+          "\\nE-mail : " + email + "\\n\\nBesoin :\\n" + need
       });
-      return send(res, 200, { ok: true }, ALLOWED_ORIGIN);
+      console.log("Contact email accepted by Resend:", result.id || "id indisponible");
+      return send(res, 200, { ok: true });
     } catch (error) {
       console.error("Contact endpoint error:", error?.stack || error?.message || String(error));
-      return send(res, 502, { error: "L'envoi a échoué. Réessayez ou contactez-nous directement." }, ALLOWED_ORIGIN);
+      return send(res, 502, { error: "L'envoi a échoué. Réessayez ou contactez-nous directement." });
     }
   });
 });
