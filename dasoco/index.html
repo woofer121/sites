@@ -129,6 +129,28 @@ body{overflow-x:hidden}
 @media(max-width:900px){.resources-preview-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.resources-preview{padding:48px 0}.resources-preview-grid{grid-template-columns:1fr}.resources-preview-card{min-height:0;padding:20px}.resources-preview-more .btn{width:100%}}
 </style>
+<style id="dasoco-demo-card-contrast">
+/* Contraste visuel des démonstrations : fond bleu-gris et cartes blanches. */
+#realisations{background:#f0f5fb}
+#realisations .project{
+  background:#fff;
+  border:1px solid #cbd8e8;
+  box-shadow:0 9px 28px rgba(7,27,59,.10);
+}
+#realisations .project-link:hover{
+  transform:translateY(-4px);
+  border-color:#8db7f1;
+  box-shadow:0 16px 38px rgba(7,27,59,.16);
+}
+#realisations .project-link:focus-visible{
+  outline:3px solid #087fe2;
+  outline-offset:4px;
+}
+@media(prefers-reduced-motion:reduce){
+  #realisations .project-link{transition:none}
+  #realisations .project-link:hover{transform:none}
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#accueil">Aller au contenu principal</a>
