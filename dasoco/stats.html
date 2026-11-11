@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Statistiques privées — DASOCO</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#14233c;background:#f4f7fb}
+*{box-sizing:border-box}body{margin:0}header{background:#10213c;color:white;padding:25px max(20px,calc((100vw - 1050px)/2))}h1{margin:8px 0;font-size:clamp(1.6rem,4vw,2.2rem)}header p{margin:0;color:#c0d1e3}
+main{max-width:1050px;margin:auto;padding:28px 20px 60px}.toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:0 0 24px}.toolbar label{font-weight:650;font-size:.86rem;display:block;margin-bottom:7px}input,select,button{font:inherit;border-radius:10px;padding:11px 14px;border:1px solid #cbd5e1}input{width:min(270px,65vw)}button{background:#2663df;border-color:#2663df;color:white;font-weight:700;cursor:pointer}button:hover{background:#1d4fb5}button:disabled{opacity:.5;cursor:default}.muted{color:#65758b}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid #e3eaf4;border-radius:18px;padding:22px;box-shadow:0 8px 24px #173b6920}.kpi{font-size:2.35rem;font-weight:800;color:#1660cd}.card h2{font-size:1.1rem;margin:0 0 16px}.card p{margin:6px 0}.full{grid-column:1/-1}table{border-collapse:collapse;width:100%;font-size:.93rem}td,th{text-align:left;padding:10px 8px;border-bottom:1px solid #edf1f7}th:last-child,td:last-child{text-align:right}td:nth-child(2),th:nth-child(2){text-align:right}.scroll{overflow:auto}.bars{display:flex;align-items:end;gap:3px;min-height:150px;margin-top:20px;border-bottom:1px solid #cbd5e1}.bar{background:linear-gradient(#23b5ad,#2c65db);border-radius:5px 5px 0 0;flex:1;min-width:5px}.bars .bar:hover{background:#1f469a}.legend{display:flex;gap:20px;font-size:.8rem;color:#65758b}.foot{margin-top:24px;font-size:.84rem;color:#65758b}.alert{color:#c2363b;font-weight:650}.hide{display:none}@media(max-width:620px){.grid{grid-template-columns:1fr}.card{padding:17px}.kpi{font-size:2rem}}
+</style></head>
+<body>
+<header><div style="font-weight:850;letter-spacing:.12em">DASOCO <span style="color:#46d6cc">/ STATISTIQUES</span></div><h1>Fréquentation du site</h1><p>Tableau de bord privé · pages vues, visites et sources de trafic</p></header>
+<main>
+<div class="toolbar">
+  <div><label for="secret">Code d'accès</label><input type="password" id="secret" placeholder="Code administrateur" autocomplete="off"></div>
+  <div><label for="period">Période</label><select id="period"><option value="7">7 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option></select></div>
+  <button id="load">Afficher les statistiques</button>
+</div>
+<p id="status" class="muted" role="status">Les statistiques sont accessibles uniquement avec le code administrateur.</p>
+<section id="results" class="grid hide" aria-live="polite">
+<div class="card"><h2>Pages vues</h2><div class="kpi" id="views">0</div><p class="muted">Chargements de pages suivis</p></div>
+<div class="card"><h2>Visites</h2><div class="kpi" id="visits">0</div><p class="muted">Sessions estimées (30 minutes d'inactivité)</p></div>
+<div class="card full"><h2>Évolution quotidienne des pages vues</h2><div id="chart" class="bars" role="img" aria-label="Graphique des pages vues par jour"></div><p class="muted" id="chartcaption"></p></div>
+<div class="card"><h2>Provenance des visites</h2><div class="scroll"><table><thead><tr><th>Source</th><th>Visites</th><th>Pages vues</th></tr></thead><tbody id="sources"></tbody></table></div></div>
+<div class="card"><h2>Pages les plus consultées</h2><div class="scroll"><table><thead><tr><th>Page</th><th>Vues</th></tr></thead><tbody id="pages"></tbody></table></div></div>
+<div class="card full"><h2>Campagnes identifiées (UTM)</h2><div class="scroll"><table><thead><tr><th>Campagne</th><th>Visites</th><th>Pages vues</th></tr></thead><tbody id="campaigns"></tbody></table></div></div>
+</section>
+<p class="foot">Mesure interne sans Google Analytics, sans cookies publicitaires et sans stockage d'adresses IP. Les visites sont des estimations par onglet, et le suivi commence à la date d'installation. Les bloqueurs et préférences « ne pas suivre » peuvent réduire les chiffres.</p>
+</main>
+<script>
+(function () {
+"use strict";
+var base="https://dasoco-analytics.onrender.com";
+var status=document.getElementById("status"), results=document.getElementById("results");
+var nf=new Intl.NumberFormat("fr-FR");
+function td(row,value){var cell=document.createElement("td");cell.textContent=String(value);row.appendChild(cell);}
+function rows(id,data,fields){var tbody=document.getElementById(id);tbody.replaceChildren();if(!data.length){var tr=document.createElement("tr");var cell=document.createElement("td");cell.colSpan=fields.length;cell.textContent="Aucune donnée pour cette période";tr.appendChild(cell);tbody.appendChild(tr);return;}data.forEach(function(v){var tr=document.createElement("tr");fields.forEach(function(f){td(tr,f==="name"?v.name:nf.format(v[f]||0));});tbody.appendChild(tr);});}
+async function load(){
+var secret=document.getElementById("secret").value.trim();
+if(!secret){status.textContent="Saisis ton code administrateur.";return;}
+var button=document.getElementById("load");button.disabled=true;status.className="muted";status.textContent="Chargement des statistiques…";
+try{
+var days=document.getElementById("period").value;
+var response=await fetch(base+"/api/summary?days="+encodeURIComponent(days),{headers:{Authorization:"Bearer "+secret},cache:"no-store"});
+var data=await response.json();
+if(!response.ok)throw Error(data.error||"Erreur de connexion ("+response.status+")");
+document.getElementById("views").textContent=nf.format(data.total.pageviews);
+document.getElementById("visits").textContent=nf.format(data.total.visits);
+rows("sources",data.sources,["name","visits","pageviews"]);
+rows("pages",data.pages,["name","pageviews"]);
+rows("campaigns",data.campaigns,["name","visits","pageviews"]);
+var chart=document.getElementById("chart");chart.replaceChildren();
+var today=new Date(), items=[];
+for(var i=Number(days)-1;i>=0;i--){var d=new Date(today);d.setDate(d.getDate()-i);var key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");var match=data.daily.find(function(v){return v.date===key;});items.push({date:key,value:match?match.pageviews:0});}
+var maximum=Math.max(1,...items.map(function(d){return d.value;}));
+items.forEach(function(p){var bar=document.createElement("div");bar.className="bar";bar.style.height=Math.max(2,p.value/maximum*140)+"px";bar.title=p.date+" : "+p.value+" pages vues";bar.setAttribute("aria-label",bar.title);chart.appendChild(bar);});
+document.getElementById("chartcaption").textContent="Du "+items[0].date+" au "+items[items.length-1].date+" · pic : "+maximum+" pages vues par jour";
+results.classList.remove("hide");status.textContent="Statistiques mises à jour · "+new Date(data.updatedAt).toLocaleString("fr-FR");
+}catch(e){status.className="alert";status.textContent=e.message;results.classList.add("hide");}
+finally{button.disabled=false;}
+}
+document.getElementById("load").addEventListener("click",load);
+document.getElementById("secret").addEventListener("keydown",function(e){if(e.key==="Enter")load();});
+})();
+</script>
+</body></html>
