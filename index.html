@@ -35,7 +35,7 @@
 
   <section class="panel" id="downloads">
     <div class="section-label">Tout se fait depuis ton téléphone</div>
-    <h2>3 petits téléchargements, et c’est parti !</h2>
+    <h2>3 téléchargements, et c’est parti !</h2>
     <p>Avec cette méthode, tu <strong>n’as plus besoin de chercher YouTube sur APKMirror</strong> : un assistant peut télécharger le bon fichier directement pour Morphe.</p>
     <div class="instruction" role="note"><strong>La différence :</strong> l’assistant est une application <strong>tierce et indépendante</strong>, non fournie ni recommandée officiellement par Morphe. Si elle ne fonctionne pas, une méthode manuelle reste disponible plus bas.</div>
 
@@ -46,13 +46,13 @@
     </div>
 
     <div class="dl">
-      <div class="dl-header"><span class="number">2</span><div><h3>MicroG-RE <span class="app-version">7.3.1</span></h3><div class="muted">Permet de connecter ton compte Google • version universelle</div></div></div>
+      <div class="dl-header"><span class="number">2</span><div><h3>MicroG-RE <span class="app-version">7.3.1</span></h3><div class="muted">Permet de connecter ton compte Google • version universelle, environ 113 Mo</div></div></div>
       <a class="btn primary" href="https://github.com/MorpheApp/MicroG-RE/releases/download/7.3.1/microg-7.3.1.apk" rel="noopener noreferrer">⬇ Télécharger MicroG</a>
       <span class="muted">Ouvre le fichier téléchargé et installe-le. Pas besoin de te connecter tout de suite.</span>
     </div>
 
     <div class="dl" id="helper">
-      <div class="dl-header"><span class="number">3</span><div><h3>Assistant de téléchargement <span class="app-version">5.4.0</span></h3><div class="muted">Évite de chercher manuellement le fichier YouTube • environ 4 Mo</div></div></div>
+      <div class="dl-header"><span class="number">3</span><div><h3>Assistant de téléchargement <span class="app-version">5.4.0</span></h3><div class="muted">Cherche automatiquement le fichier YouTube compatible</div></div></div>
       <a class="btn primary" href="https://github.com/rushiranpise/helper-for-morphe/releases/download/v5.4.0/apk-download-helper-v5.4.0.apk" rel="noopener noreferrer">⬇ Télécharger l’assistant</a>
       <span class="muted">Ouvre le fichier et installe-le comme les deux autres. C’est un projet indépendant : <a href="https://github.com/rushiranpise/helper-for-morphe" rel="noopener noreferrer">voir son code source</a>.</span>
     </div>
@@ -89,18 +89,18 @@
     </div>
 
     <div class="step" data-step="4">
-      <div class="step-row"><input class="check" id="s4" type="checkbox" aria-label="Étape 4 terminée"><div><h3>4. Ajoute les réglages RVX</h3><p>Ouvre une première fois Morphe, puis reviens ici et touche le bouton. Morphe doit te proposer d’ajouter la source <strong>Anddea</strong>. Accepte.</p></div></div>
+      <div class="step-row"><input class="check" id="s4" type="checkbox" aria-label="Étape 4 terminée"><div><h3>4. Ajoute les patches RVX</h3><p>Ouvre une première fois Morphe, puis reviens ici et touche le bouton. Morphe doit te proposer d’ajouter la source <strong>Anddea</strong>. Accepte.</p></div></div>
       <div class="extra"><a class="btn mint" href="https://morphe.software/add-source?github=anddea/revanced-patches&amp;app=com.google.android.youtube" rel="noopener noreferrer">✳ Ajouter RVX Anddea à Morphe</a><div class="muted" style="margin-top:8px">Si le bouton ne marche pas : Morphe → « Sources » → + → colle <strong>github.com/anddea/revanced-patches</strong>.</div></div>
     </div>
 
     <div class="step" data-step="5">
-      <div class="step-row"><input class="check" id="s5" type="checkbox" aria-label="Étape 5 terminée"><div><h3>5. Active l’assistant dans Morphe</h3><p>Ouvre <strong>Morphe → Paramètres → APK download helper</strong> (dans « Fichiers » ou « Fichiers et stockage »). Sélectionne l’assistant installé et touche <strong>Trust / Faire confiance</strong> pour l’autoriser.</p></div></div>
+      <div class="step-row"><input class="check" id="s5" type="checkbox" aria-label="Étape 5 terminée"><div><h3>5. Active l’assistant dans Morphe</h3><p>Ouvre <strong>Morphe → Paramètres → Fichiers → APK download helper</strong>. Active l’interrupteur à côté de l’assistant installé, puis confirme avec <strong>Trust / Faire confiance</strong>. Le bouton d’assistance n’apparaît pendant le téléchargement que si cette autorisation est activée.</p></div></div>
       <div class="extra"><div class="instruction">Tu autorises une application tierce à fournir les fichiers à Morphe. Si cette option n’apparaît pas, vérifie que l’assistant est bien installé ; sinon, utilise la <a href="#manual">méthode manuelle</a>.</div></div>
     </div>
 
     <div class="step" data-step="6">
-      <div class="step-row"><input class="check" id="s6" type="checkbox" aria-label="Étape 6 terminée"><div><h3>6. Laisse Morphe récupérer YouTube et l’installer</h3><p>Dans Morphe, touche <strong>YouTube</strong> → choisis <strong>Anddea</strong> → « <strong>Oui, aide-moi à trouver un APK</strong> » → « <strong>Utiliser un assistant</strong> ». L’assistant tente de télécharger la bonne version ; reviens dans Morphe si nécessaire, laisse les patches proposés, puis touche <strong>Patch</strong> et <strong>Install</strong>.</p></div></div>
-      <div class="extra"><div class="instruction"><strong>Plus besoin de chercher une version sur APKMirror !</strong> Si l’assistant échoue, ouvre simplement <a href="#manual">la solution de secours</a>. Selon la version de Morphe, certains boutons peuvent porter un autre nom.</div></div>
+      <div class="step-row"><input class="check" id="s6" type="checkbox" aria-label="Étape 6 terminée"><div><h3>6. Récupère YouTube et laisse Morphe le modifier</h3><p>Dans Morphe, touche <strong>YouTube</strong> → si demandé, choisis <strong>Anddea</strong> → « <strong>Oui, aide-moi à trouver un APK</strong> » → « <strong>Utiliser une application d’assistance / Use a helper app</strong> ». Dans l’assistant, demande la <strong>version exacte proposée par Morphe</strong> (actuellement <strong>21.13.164</strong> pour Anddea 4.3.0), au format <strong>APK</strong>, puis lance le téléchargement. S’il réussit, l’assistant transmet le fichier à Morphe : la modification démarre automatiquement. À la fin, appuie sur <strong>Installer / Install</strong>.</p></div></div>
+      <div class="extra"><div class="instruction"><strong>Important :</strong> dans l’assistant, ne sélectionne pas « Latest / Dernière version » si elle diffère de la version demandée par Morphe. Si le téléchargement échoue, ouvre <a href="#manual">la méthode APKMirror</a>. Les intitulés peuvent varier suivant la langue de l’application.</div></div>
     </div>
 
     <div class="step" data-step="7">
@@ -112,7 +112,7 @@
     <h2>Un souci ?</h2>
     <details><summary>« L'application n'a pas été installée »</summary><p>Si une ancienne version de RVX est déjà installée et utilise une signature différente, exporte ses réglages si possible puis désinstalle uniquement <strong>l'ancien RVX</strong> et réessaie. Ne supprime pas ton YouTube officiel.</p></details>
     <details><summary>Android bloque l'installation du fichier</summary><p>Dans l'avertissement Android, autorise temporairement l'installation par l'application utilisée pour ouvrir le fichier (par exemple Chrome ou Fichiers). Tu peux désactiver cette autorisation après la fin de l'installation. Ne désactive pas Play Protect globalement.</p></details>
-    <details><summary>Le téléchargement automatique ne marche pas</summary><p>L’assistant n’est pas garanti : certaines sources peuvent bloquer ou ne pas proposer l’APK. Ouvre la <a href="#manual">méthode APKMirror</a>, télécharge l’APK indiqué, puis sélectionne « J’ai déjà un APK » dans Morphe.</p></details>
+    <details><summary>Le téléchargement automatique ne marche pas</summary><p>Dans Morphe, vérifie <strong>Paramètres → Fichiers → APK download helper</strong> : l’assistant doit être autorisé. Certains sites peuvent bloquer le téléchargement. Ouvre alors la <a href="#manual">méthode APKMirror</a>, télécharge la version exacte demandée par Morphe, sans l’installer, puis sélectionne « Non, j’ai déjà un APK » et choisis ce fichier dans Morphe.</p></details>
     <details><summary>« Version non compatible » ou « Split APK »</summary><p>Vérifie que tu as pris YouTube <strong>21.13.164</strong> en <strong>APK universal nodpi</strong>, pas APKM/APKS/BUNDLE. Si le manager recommande une autre version compatible, suis précisément cette recommandation.</p></details>
     <details><summary>Je n'arrive pas à me connecter</summary><p>Vérifie que MicroG-RE est installé, ouvre YouTube RVX et réessaie la connexion. Pour un problème particulier, consulte la <a href="https://morphe.software/faq" rel="noopener noreferrer">FAQ officielle Morphe</a>. Ne communique ton mot de passe Google à personne.</p></details>
     <details><summary>Je veux mettre RVX à jour plus tard</summary><p>Ouvre Morphe et cherche une mise à jour de la source Anddea, puis reconstruis l'application. Les versions compatibles peuvent changer : ne télécharge pas une nouvelle version de YouTube au hasard.</p></details>
