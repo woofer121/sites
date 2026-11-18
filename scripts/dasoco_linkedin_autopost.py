@@ -88,9 +88,16 @@ def q(value):
 
 def target_slot():
     now = dt.datetime.now(ZONE)
+    kind = os.environ.get("DASOCO_SLOT", "next")
+    if kind == "immediate":
+        return now
+    if kind not in ("next", "friday"):
+        raise RuntimeError("DASOCO_SLOT non valide")
     for shift in range(9):
         day = now.date() + dt.timedelta(days=shift)
         if day.weekday() not in DAY_MAP:
+            continue
+        if kind == "friday" and day.weekday() != 4:
             continue
         when = dt.datetime.combine(day, dt.time(10, 0), ZONE)
         if when > now + dt.timedelta(hours=2):
@@ -137,6 +144,14 @@ def existing_slot(org_id, channel_id, when):
     return None
 
 def scenario_for(when):
+    # Première publication : tableau de bord, jamais une reprise des anciennes vidéos.
+    if os.environ.get("DASOCO_SLOT") == "immediate":
+        demo = DEMOS[2]
+        caption = (demo["captions"][0] + BASE + "/" + demo["path"] + "\n\n"
+                   "Prototype de démonstration avec données fictives.\n"
+                   "DASOCO — Vos idées méritent leurs propres outils.\n"
+                   "#DASOCO #ApplicationMetier #TableauDeBord")
+        return demo, caption
     # Rotation hebdomadaire, trois sujets différents par semaine.
     week = when.isocalendar().week
     position = DAY_MAP[when.weekday()]
@@ -286,11 +301,14 @@ def schedule(org_id, channel_id, when, caption, url):
     if prior:
         print("Créneau déjà présent après rendu :", prior)
         return
+    immediate = os.environ.get("DASOCO_SLOT") == "immediate"
     due = when.astimezone(dt.timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+    scheduling = ", schedulingType: automatic, mode: shareNow" if immediate else (
+        ", schedulingType: automatic, mode: customScheduled, dueAt: " + q(due))
     mutation = (
         "mutation { createPost(input: {text: " + q(caption) +
         ", channelId: " + q(channel_id) +
-        ", schedulingType: automatic, mode: customScheduled, dueAt: " + q(due) +
+        scheduling +
         ", assets: [{video: {url: " + q(url) +
         "}}]}) { ... on PostActionSuccess { post {id dueAt status text} }"
         " ... on MutationError {message} } }"
