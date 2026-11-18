@@ -1,0 +1,74 @@
+name: DASOCO - Premiere video et vendredi
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dasoco-first-video.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dasoco-linkedin-buffer
+  cancel-in-progress: false
+
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verifier la cle Buffer sans l'afficher
+        run: |
+          if [ -z "$BUFFER_API_KEY" ]; then
+            echo '::error::Secret BUFFER_API_KEY absent'
+            exit 1
+          fi
+          if [ -f .github/dasoco-first-video-done ]; then
+            echo 'Deja realise, ne pas republier.'
+            exit 0
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installer les dependances pour de vraies captures
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --disable-pip-version-check pillow cairosvg playwright
+          python -m playwright install --with-deps chromium
+          python -m py_compile scripts/dasoco_linkedin_autopost.py
+      - name: Premiere publication video DASOCO maintenant
+        run: |
+          set -e
+          DASOCO_SLOT=immediate DASOCO_UPLOAD_ONLY=1 python scripts/dasoco_linkedin_autopost.py
+          git config user.name 'dasoco-video-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add dasoco/media/linkedin/*.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m 'DASOCO video de tableau de bord [skip ci]'
+            git push
+          fi
+          DASOCO_SLOT=immediate python scripts/dasoco_linkedin_autopost.py
+      - name: Programmer vendredi a 10h une seconde video
+        run: |
+          set -e
+          DASOCO_SLOT=friday DASOCO_UPLOAD_ONLY=1 python scripts/dasoco_linkedin_autopost.py
+          git add dasoco/media/linkedin/*.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m 'DASOCO video de vendredi [skip ci]'
+            git push
+          fi
+          DASOCO_SLOT=friday python scripts/dasoco_linkedin_autopost.py
+      - name: Marquer le lancement pour eviter les doublons
+        run: |
+          echo 'Premiere video et vendredi programmes par Buffer' > .github/dasoco-first-video-done
+          git add .github/dasoco-first-video-done
+          git commit -m 'DASOCO: premier lancement effectue [skip ci]'
+          git push
