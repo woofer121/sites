@@ -1,0 +1,59 @@
+name: DASOCO - LinkedIn videos via Buffer
+
+on:
+  schedule:
+    - cron: '15 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dasoco-linkedin-buffer
+  cancel-in-progress: false
+
+jobs:
+  publish-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout site DASOCO
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check Buffer credential
+        run: |
+          if [ -z "$BUFFER_API_KEY" ]; then
+            echo '::error::Secret BUFFER_API_KEY absent. Ajouter la clé dans Settings > Secrets and variables > Actions.'
+            exit 1
+          fi
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install rendering dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --disable-pip-version-check pillow cairosvg playwright
+          python -m playwright install --with-deps chromium
+      - name: Validate Python syntax
+        run: python -m py_compile scripts/dasoco_linkedin_autopost.py
+      - name: Prepare real demo screencast
+        env:
+          DASOCO_UPLOAD_ONLY: '1'
+        run: python scripts/dasoco_linkedin_autopost.py
+      - name: Commit the MP4 to the public DASOCO site
+        run: |
+          git config user.name 'dasoco-video-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add dasoco/media/linkedin/*.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m 'DASOCO: publier la video demo pour Buffer [skip ci]'
+            git push
+          fi
+      - name: Wait for Render deployment and schedule native video
+        run: python scripts/dasoco_linkedin_autopost.py
