@@ -1,0 +1,44 @@
+name: DASOCO - Import video HeyGen Brynn
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dasoco-brynn-heygen-upload.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dasoco-brynn-heygen-upload
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      HEYGEN_MEDIA_URL: "https://files2.heygen.ai/movio/video/203ab188b4a8c05e87dde27e5e537af0/124785f7a7054885804f929f2b9f832a/caption.mp4?Expires=1795717966&Signature=tpNjsCzShN3NYymiw2gxGmBtsQ~pvx1NEibaP0e8SoRyR1QarYj-KV2eDcd4qafMl-Ya-bTOVohdDR13GLv9N3l4x6NbiqGHTyHL-TfGD0lU7s~cE1QnvusmNUN4guu-sQ3BufF587trQLO77cUQVqdYmeHrIspwjOD4XvFINxu3j2k4nRVA24kGAKwEmlRzIiMV6Qg5J4I0WCOqL7J7TOSLllRGWnPgeIQ3aNfx29DptvQ2mLtpYbuB30oHt6wdbLt2nuu2WPrWz1LvR12tid34vhFRVmrKhj~5JnuDoJLvMfrau9~dkGwd85kS8Z6QeQac2pG26VPXW2jyYk4bpg__&Key-Pair-Id=K3TSZ3KU01LY58"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download generated Brynn video
+        run: |
+          set -euo pipefail
+          if [ -f 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4' ]; then
+            echo 'MP4 already present'
+            exit 0
+          fi
+          mkdir -p dasoco/media/linkedin
+          curl -fsSL --retry 3 --retry-delay 2 "$HEYGEN_MEDIA_URL" -o 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
+          [ "$(stat -c %s 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4')" -gt 100000 ]
+          file 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
+      - name: Commit public marketing video to DASOCO site
+        run: |
+          set -euo pipefail
+          git config user.name "dasoco-video-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
+          if ! git diff --cached --quiet; then
+            git commit -m "DASOCO: heberger la video HeyGen Brynn [skip ci]"
+            git push
+          fi
