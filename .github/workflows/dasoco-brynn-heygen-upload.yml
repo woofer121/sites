@@ -1,4 +1,4 @@
-name: DASOCO - Import video HeyGen Brynn
+name: DASOCO - Import video HeyGen Brynn naturelle
 on:
   push:
     branches: [main]
@@ -18,27 +18,27 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
-      HEYGEN_MEDIA_URL: "https://files2.heygen.ai/movio/video/203ab188b4a8c05e87dde27e5e537af0/124785f7a7054885804f929f2b9f832a/caption.mp4?Expires=1795717966&Signature=tpNjsCzShN3NYymiw2gxGmBtsQ~pvx1NEibaP0e8SoRyR1QarYj-KV2eDcd4qafMl-Ya-bTOVohdDR13GLv9N3l4x6NbiqGHTyHL-TfGD0lU7s~cE1QnvusmNUN4guu-sQ3BufF587trQLO77cUQVqdYmeHrIspwjOD4XvFINxu3j2k4nRVA24kGAKwEmlRzIiMV6Qg5J4I0WCOqL7J7TOSLllRGWnPgeIQ3aNfx29DptvQ2mLtpYbuB30oHt6wdbLt2nuu2WPrWz1LvR12tid34vhFRVmrKhj~5JnuDoJLvMfrau9~dkGwd85kS8Z6QeQac2pG26VPXW2jyYk4bpg__&Key-Pair-Id=K3TSZ3KU01LY58"
+      HEYGEN_MEDIA_URL: "https://files2.heygen.ai/aws_pacific/avatar_tmp/b0e9e2ed4d1b439ab0be257eb33f3ee9/f86f1e732e74ee1379bc6618e35ef7a2.mp4?Expires=1796054167&Signature=xiX5YZQB~RzZiRjL6Dp8Kwo7voLLjeP7BcyxafbqjpqL6nTeDAlBxQuFWQOT3iOCrT4cK36tQEwcuIBB-J2cA2usaBz7iEvAWyr7qAtStEPOttF-b2nm-cJ5raziodi6ARfjjll1jYozc4B3rnU8RS0~-SaliqWyeYy81ySYMF0iZYOKeqXGP9BM0DSCBPFuSAoumk~TNLqwWB8~NWRJhFTNXpGNiBWq4Xy07yZ7lWl~UZ4kktfg2VxSS9lThmW9dQeQJJtNHwTyrc9f6~Zb3QM6hkr-GOG0WHM4PtCMr8Gk7ngaYEGd8KKVh5D71c1806i368h~-028P8YDG9lUWg__&Key-Pair-Id=K3TSZ3KU01LY58"
     steps:
       - uses: actions/checkout@v4
       - name: Download generated Brynn video
         run: |
           set -euo pipefail
-          if [ -f 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4' ]; then
+          if [ -f 'dasoco/media/linkedin/2026-11-23-brynn-dasoco-naturel.mp4' ]; then
             echo 'MP4 already present'
             exit 0
           fi
           mkdir -p dasoco/media/linkedin
-          curl -fsSL --retry 3 --retry-delay 2 "$HEYGEN_MEDIA_URL" -o 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
-          [ "$(stat -c %s 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4')" -gt 100000 ]
-          file 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
+          curl -fsSL --retry 3 --retry-delay 2 "$HEYGEN_MEDIA_URL" -o 'dasoco/media/linkedin/2026-11-23-brynn-dasoco-naturel.mp4'
+          [ "$(stat -c %s 'dasoco/media/linkedin/2026-11-23-brynn-dasoco-naturel.mp4')" -gt 100000 ]
+          file 'dasoco/media/linkedin/2026-11-23-brynn-dasoco-naturel.mp4'
       - name: Commit public marketing video to DASOCO site
         run: |
           set -euo pipefail
           git config user.name "dasoco-video-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add 'dasoco/media/linkedin/2026-11-19-brynn-heygen-dasoco.mp4'
+          git add 'dasoco/media/linkedin/2026-11-23-brynn-dasoco-naturel.mp4'
           if ! git diff --cached --quiet; then
-            git commit -m "DASOCO: heberger la video HeyGen Brynn [skip ci]"
+            git commit -m "DASOCO: nouvelle video HeyGen Brynn naturelle [skip ci]"
             git push
           fi
