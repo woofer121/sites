@@ -1,0 +1,54 @@
+{
+  "2026-11-27": {
+    "path": "demos/tableau-de-bord.html",
+    "title": "Sur quelle période ?",
+    "subtitle": "Un filtre change la lecture",
+    "actions": [
+      "select#period",
+      "select#period"
+    ],
+    "caption": "Deux collègues arrivent en réunion avec deux chiffres différents. Tous les deux ont raison : l’un regarde la semaine, l’autre le mois.\n\nAvant de discuter du résultat, je poserais une question toute simple : « Sur quelle période ? » Dans cette courte démo, regardez ce qui change quand on touche à un seul filtre.\n\nEt chez vous, quelle question revient à chaque réunion de suivi ?"
+  },
+  "2026-11-30": {
+    "path": "demos/generateur-devis.html",
+    "title": "Une ligne en plus",
+    "subtitle": "Du devis au nouveau total",
+    "actions": [
+      "#add",
+      "select#vat",
+      "#reset"
+    ],
+    "caption": "« Vous pouvez ajouter une prestation au devis ? »\n\nLa demande tient en une phrase. Si les lignes, la TVA et le total vivent à trois endroits différents, la réponse prend un peu plus longtemps.\n\nDans la vidéo, on ajoute une prestation, puis on change le taux de TVA. Gardez un œil sur le total.\n\nQuand vous retouchez un devis, qu’est-ce que vous vérifiez toujours une deuxième fois ?"
+  },
+  "2026-12-02": {
+    "path": "demos/cartographie-besoins.html",
+    "title": "Mais où exactement ?",
+    "subtitle": "Un besoin terrain sur une carte",
+    "actions": [
+      "button[data-filter='Accessibilité']",
+      "button[data-filter='Mobilité']",
+      "button[data-filter='Tous']"
+    ],
+    "caption": "« Il faudrait sécuriser la traversée près de l’école. »\n\nImaginez recevoir ce message au milieu de vingt autres. La première information qu’on cherche est toute simple : où, exactement ?\n\nDans cette démo, les besoins sont placés sur une carte. Passez de l’accessibilité à la mobilité et regardez quels points restent visibles.\n\nDans votre équipe, comment indique-t-on un lieu précis : une adresse, une photo, un point sur la carte ?"
+  },
+  "2026-12-04": {
+    "path": "demos/simulateur-temps.html",
+    "title": "Ça ne prend que 5 min",
+    "subtitle": "Le coût d’une petite ressaisie",
+    "actions": [
+      {
+        "fill": "#minutes",
+        "value": "5"
+      },
+      {
+        "fill": "#count",
+        "value": "10"
+      },
+      {
+        "fill": "#weeks",
+        "value": "46"
+      }
+    ],
+    "caption": "Petit calcul du vendredi. Une ressaisie de 5 minutes, dix fois par semaine, pendant 46 semaines : vous diriez combien sur un an ?\n\n38 heures et 20 minutes. C’est le temps consacré à la tâche. La part réellement récupérable dépend de ce qu’on peut automatiser.\n\nEssayez avec une tâche de votre semaine. Laquelle choisiriez-vous ?"
+  }
+}

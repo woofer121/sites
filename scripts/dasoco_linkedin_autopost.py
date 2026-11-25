@@ -20,51 +20,8 @@ DEST = SITE / "media" / "linkedin"
 ZONE = ZoneInfo("Europe/Paris")
 API = "https://api.buffer.com"
 BASE = "https://dasoco.onrender.com"
-DAY_MAP = {0: 0, 2: 1, 4: 2}
-
-DEMOS = [
-    {
-        "slug": "mini-gmao",
-        "path": "demos/mini-gmao.html",
-        "title": "Une panne. Qui intervient ?",
-        "subtitle": "Équipements · Interventions · Préventif",
-        "actions": [
-            "button[data-p='equipment']",
-            "button[data-p='orders']",
-            "button[data-p='maintenance']",
-            "button[data-p='dashboard']",
-        ],
-        "captions": [
-            "🔧 Une panne, plusieurs intervenants, des informations éparpillées ?\n\nNotre mini-GMAO de démonstration montre comment retrouver les équipements, suivre les interventions et anticiper les échéances dans un seul outil.\n\n🎬 Découvrez la démonstration, puis testez-la :\n",
-            "⚙️ Savoir ce qui est en panne, ce qui est prévu et ce qui reste à faire : cela devrait être simple.\n\nDans ce prototype DASOCO, explorez les équipements, les interventions et le planning de maintenance.\n\n🎬 Essayez vous-même :\n",
-            "🛠️ Les interventions ne devraient pas se perdre entre fichiers et messages.\n\nVoici notre mini-GMAO de démonstration : différents écrans, une information plus facile à retrouver.\n\n🎬 Démonstration interactive :\n",
-        ],
-    },
-    {
-        "slug": "suivi-demandes",
-        "path": "demos/suivi-demandes.html",
-        "title": "Où en est la demande ?",
-        "subtitle": "Signalement · Suivi · Visibilité",
-        "actions": ["button.tab:nth-of-type(2)", "button.tab:nth-of-type(3)", "button.tab:nth-of-type(1)"],
-        "captions": [
-            "📋 « Où en est ma demande ? »\n\nUn outil adapté peut rendre le suivi des interventions beaucoup plus lisible. Nous avons créé un simulateur pour illustrer cette approche.\n\n🎬 Découvrez-le et testez-le :\n",
-            "🔎 Une demande reçue, une intervention en cours, une action clôturée…\n\nQuand l'information est structurée au même endroit, chacun peut mieux suivre le processus. Voici notre prototype interactif.\n\n🎬 Testez :\n",
-            "📌 Besoin de suivre des demandes sans faire circuler dix versions d'un tableau ?\n\nVoici ce que peut apporter un petit outil métier conçu autour du processus.\n\n🎬 Simulation :\n",
-        ],
-    },
-    {
-        "slug": "tableau-de-bord",
-        "path": "demos/tableau-de-bord.html",
-        "title": "Des chiffres enfin utiles",
-        "subtitle": "Filtres · Indicateurs · Décisions",
-        "actions": ["select#period", "select#period"],
-        "captions": [
-            "📊 Un tableau de bord doit répondre à des questions concrètes, pas seulement afficher des graphiques.\n\nNotre démonstration permet de filtrer les informations et de suivre des indicateurs qui évoluent ensemble.\n\n🎬 Explorez-le :\n",
-            "🎯 Quels indicateurs sont réellement utiles à votre activité ?\n\nVoici une démonstration d'un tableau de bord interactif imaginé autour d'un besoin métier.\n\n🎬 Testez les filtres :\n",
-            "📈 Moins de chiffres dispersés, plus de visibilité sur l'activité.\n\nDécouvrez notre prototype de tableau de bord, et imaginez les informations qui seraient pertinentes pour votre entreprise.\n\n🎬 Démonstration :\n",
-        ],
-    },
-]
+PUBLISH_DAYS = {0, 2, 4}
+CALENDAR = ROOT / "dasoco" / "marketing" / "linkedin-calendrier.json"
 
 def gql(query):
     token = os.environ.get("BUFFER_API_KEY", "")
@@ -95,7 +52,7 @@ def target_slot():
         raise RuntimeError("DASOCO_SLOT non valide")
     for shift in range(9):
         day = now.date() + dt.timedelta(days=shift)
-        if day.weekday() not in DAY_MAP:
+        if day.weekday() not in PUBLISH_DAYS:
             continue
         if kind == "friday" and day.weekday() != 4:
             continue
@@ -144,24 +101,16 @@ def existing_slot(org_id, channel_id, when):
     return None
 
 def scenario_for(when):
-    # Première publication : tableau de bord, jamais une reprise des anciennes vidéos.
-    if os.environ.get("DASOCO_SLOT") == "immediate":
-        demo = DEMOS[2]
-        caption = (demo["captions"][0] + BASE + "/" + demo["path"] + "\n\n"
-                   "Prototype de démonstration avec données fictives.\n"
-                   "DASOCO — Vos idées méritent leurs propres outils.\n"
-                   "#DASOCO #ApplicationMetier #TableauDeBord")
-        return demo, caption
-    # Rotation hebdomadaire, trois sujets différents par semaine.
-    week = when.isocalendar().week
-    position = DAY_MAP[when.weekday()]
-    demo = DEMOS[(week + position) % len(DEMOS)]
-    variant = DEMOS[(week + position) % len(DEMOS)]["captions"][((week // 3) + position) % 3]
-    url = BASE + "/" + demo["path"]
-    caption = (variant + url + "\n\n"
-               "Prototype de démonstration avec données fictives.\n"
-               "DASOCO — Vos idées méritent leurs propres outils.\n"
-               "#DASOCO #ApplicationMetier #OutilsSurMesure")
+    date = when.date().isoformat()
+    calendar = json.loads(CALENDAR.read_text(encoding="utf-8"))
+    if date not in calendar:
+        raise RuntimeError("Publication à rédiger pour le " + date)
+    demo = calendar[date].copy()
+    path = Path(demo["path"])
+    if path.parent != Path("demos") or path.suffix != ".html" or not (SITE / path).is_file():
+        raise ValueError("Page de démonstration invalide : " + str(path))
+    demo["slug"] = path.stem
+    caption = demo["caption"].strip() + "\n\nDémo interactive · données fictives : " + BASE + "/" + demo["path"]
     return demo, caption
 
 def record_demo(demo, folder):
@@ -180,10 +129,14 @@ def record_demo(demo, folder):
         page.wait_for_timeout(2100)
         actions_done = 0
         for selector in demo["actions"]:
-            locator = page.locator(selector).first
+            field = selector.get("fill") if isinstance(selector, dict) else None
+            locator = page.locator(field or selector).first
             if locator.count():
                 try:
-                    if selector.startswith("select"):
+                    if field:
+                        locator.fill(selector["value"])
+                        locator.press("Tab")
+                    elif selector.startswith("select"):
                         values = locator.locator("option").all()
                         if len(values) > 1:
                             locator.select_option(index=1 if actions_done % 2 == 0 else 0)
