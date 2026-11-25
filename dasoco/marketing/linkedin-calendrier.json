@@ -50,5 +50,34 @@
       }
     ],
     "caption": "Petit calcul du vendredi. Une ressaisie de 5 minutes, dix fois par semaine, pendant 46 semaines : vous diriez combien sur un an ?\n\n38 heures et 20 minutes. C’est le temps consacré à la tâche. La part réellement récupérable dépend de ce qu’on peut automatiser.\n\nEssayez avec une tâche de votre semaine. Laquelle choisiriez-vous ?"
+  },
+  "2026-12-07": {
+    "path": "demos/declaration-incident.html",
+    "title": "« C’est en panne. »",
+    "subtitle": "Deux précisions pour la relève",
+    "actions": [
+      "select#asset",
+      {
+        "fill": "#location",
+        "value": "Dépôt — quai 2"
+      },
+      "#impactStop",
+      {
+        "fill": "#description",
+        "value": "Équipement immobilisé au quai 2."
+      }
+    ],
+    "caption": "Vous prenez la relève à 8 h. Dans les messages : « C’est en panne. » Qui rappelez-vous en premier ?\n\nDeux précisions changent la suite : où se trouve l’équipement et peut-on encore l’utiliser ? « Quai 2, équipement immobilisé » donne déjà à l’équipe de quoi organiser la matinée.\n\nC’est le choix que montre cette démo : séparer l’impact sur l’activité de la description de la panne."
+  },
+  "2026-12-09": {
+    "path": "demos/mini-gmao.html",
+    "title": "La prochaine panne ?",
+    "subtitle": "Interventions et préventif",
+    "actions": [
+      "button[data-p='orders']",
+      "button[data-p='maintenance']",
+      "button[data-p='equipment']"
+    ],
+    "caption": "Une intervention terminée mérite parfois une dernière question : quand faudra-t-il revenir ?\n\nDans cette mini-GMAO, le suivi des interventions et le planning de maintenance occupent deux écrans distincts. L’un sert à retrouver le travail en cours. L’autre permet de voir ce qu’il faut prévoir avant le prochain appel.\n\nDans votre atelier, qui pense à programmer la suite une fois le dépannage terminé ?"
   }
 }
