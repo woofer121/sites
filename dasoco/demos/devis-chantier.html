@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carnet de devis chantier | Démo DASOCO</title>
+<meta name="description" content="Testez le suivi des devis d’une entreprise du bâtiment, du chiffrage des travaux au passage en facturation.">
+<link rel="icon" href="../assets/favicon.svg"><link rel="stylesheet" href="../assets/demo-tools.css">
+<link rel="stylesheet" href="../assets/chantier.css"><script defer src="../assets/chiffrage.js"></script><script defer src="../assets/chantier.js"></script>
+<script defer src="../analytics.js"></script>
+</head>
+<body>
+<header><a class="brand" href="../index.html"><img src="../assets/brand-mark.svg" alt="">DASOCO</a><a href="../index.html#realisations">← Toutes les démos</a></header>
+<main>
+<div class="intro"><div class="kicker">Bâtiment · Démonstration interactive</div>
+<h1>Carnet de devis chantier</h1><p class="lead">Décrivez les travaux, vérifiez le chiffrage proposé et suivez le devis jusqu’à la facturation.</p></div>
+<section class="panel assistant no-print" aria-labelledby="ai-title">
+<div class="kicker">Assistant de chiffrage</div><h2 id="ai-title">Générer un devis par IA</h2>
+<p>L’assistant utilise l’IA générative du navigateur si elle est disponible, ou un modèle local de classement. Les prix proviennent d’un catalogue fictif de six prestations. Vérifiez les quantités et les tarifs avant validation.</p>
+<label for="brief">Quels travaux sont prévus ?</label><textarea id="brief" rows="3" maxlength="1800">Repeindre 48 m² de murs et poser 24 m² de parquet flottant.</textarea>
+<button id="generate">Générer le brouillon</button><p id="feedback" role="status"></p>
+</section><div class="layout">
+<aside class="panel"><h2>Mes chantiers</h2><div id="list"></div><p class="muted">Chantiers fictifs. Les modifications sont effacées au rechargement.</p></aside>
+<section class="panel" id="sheet" aria-labelledby="title">
+<div class="meta"><span id="ref"></span><span class="status" id="badge"></span></div>
+<h2 id="title" tabindex="-1"></h2><p id="client"></p>
+<div id="detail">
+<table><thead><tr><th>Travaux prévus</th><th>Qté</th><th>PU HT</th><th>Total HT</th></tr></thead><tbody id="lines"></tbody></table>
+<div class="totals"><p>Total HT <strong id="ht"></strong></p><p>TVA simulée (20 %) <strong id="vat"></strong></p><p class="total">Total TTC <strong id="ttc"></strong></p></div>
+<div class="actions no-print"><button id="advance"></button><label class="selectbox">Autre statut<select id="state"></select></label><button class="secondary" id="edit">Modifier le devis</button><button class="secondary" id="copy">Dupliquer</button></div>
+<button class="secondary no-print" id="print">Imprimer / PDF</button></div>
+<form id="form" hidden>
+<label>Chantier<input name="job" required maxlength="85"></label><label>Client fictif<input name="customer" required maxlength="85"></label>
+<div id="editlines"></div><button type="button" class="secondary" id="add">+ Ajouter une ligne</button>
+<div class="actions"><button>Enregistrer</button><button type="button" class="secondary" id="cancel">Annuler</button></div></form>
+<p class="printnote">Document de démonstration · Sans valeur contractuelle</p>
+</section></div>
+<p class="no-print" role="status" id="notice"></p>
+<section class="panel cta"><h2>Comment suivez-vous vos devis aujourd’hui ?</h2><p>DASOCO adapte cet outil à vos prestations, vos documents et vos étapes de validation.</p><a class="btn" href="../index.html?projet=documents#contact">Décrire mon besoin →</a></section>
+</main></body></html>
